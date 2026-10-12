@@ -1,0 +1,293 @@
+{
+  "greet": {
+    "en": "Hello, this is {name}. How can I help?",
+    "en_sms": "{name}. How can I help?",
+    "ur": "السلام علیکم، یہ {name} ہے۔ بتائیے، کیا مدد چاہیے؟",
+    "ur_sms": "{name}۔ کیا مدد چاہیے؟",
+    "ar": "مرحباً، معكم {name}. كيف يمكنني مساعدتكم؟",
+    "ar_sms": "{name}. كيف أساعدكم؟"
+  },
+  "ask_name": {
+    "en": "What name should I use?",
+    "ur": "آپ کا نام کیا ہے؟",
+    "ar": "ما الاسم الذي أستخدمه؟"
+  },
+  "ask_reason": {
+    "en": "What is this about?",
+    "ur": "یہ کس بارے میں ہے؟",
+    "ar": "بماذا يتعلق هذا؟"
+  },
+  "ask_when": {
+    "en": "When should this be?",
+    "ur": "یہ کب ہونا چاہیے؟",
+    "ar": "متى يجب أن يكون هذا؟"
+  },
+  "confirm_book": {
+    "en": "{name}, I have {reason} for {when}. Shall I confirm this?",
+    "ur": "{name}، {reason}، وقت {when}۔ کیا میں اس کی تصدیق کر دوں؟",
+    "ar": "{name}، الطلب هو {reason} في {when}. هل أؤكد ذلك؟"
+  },
+  "booked": {
+    "en": "Confirmed, {name}. {reason} is set for {when}.",
+    "en_sms": "Confirmed, {name}. {when}.",
+    "ur": "ہو گیا {name}۔ {reason}، {when}۔",
+    "ar": "تم التأكيد يا {name}. {reason} في {when}."
+  },
+  "ask_remind": {
+    "en": "What should I remind you about?",
+    "ur": "کس بات کی یاددہانی چاہیے؟",
+    "ar": "بماذا تريدون التذكير؟"
+  },
+  "remind_offer": {
+    "en": "Shall I send a reminder about {detail}?",
+    "ur": "کیا میں {detail} کی یاددہانی بھیج دوں؟",
+    "ar": "هل أرسل تذكيراً بخصوص {detail}؟"
+  },
+  "reminded": {
+    "en": "All right. The reminder will be sent.",
+    "ur": "ٹھیک ہے، یاددہانی بھیج دی جائے گی۔",
+    "ar": "حسناً. سيتم إرسال التذكير."
+  },
+  "remind_declined": {
+    "en": "All right. I will not send a reminder.",
+    "ur": "ٹھیک ہے، یاددہانی نہیں بھیجی جائے گی۔",
+    "ar": "حسناً. لن أرسل تذكيراً."
+  },
+  "ask_review": {
+    "en": "From 1 to 5, how was it?",
+    "ur": "ایک سے پانچ میں، یہ کیسا رہا؟",
+    "ar": "من 1 إلى 5، كيف كانت التجربة؟"
+  },
+  "reviewed": {
+    "en": "Thank you. I have noted {rating} out of 5.",
+    "ur": "شکریہ۔ {rating} میں سے 5 نوٹ کر لیا۔",
+    "ar": "شكراً لكم. تم تسجيل {rating} من 5."
+  },
+  "recover_offer": {
+    "en": "Shall I set this up again?",
+    "ur": "کیا میں اسے دوبارہ ترتیب دے دوں؟",
+    "ar": "هل أعيد ترتيب هذا؟"
+  },
+  "recover_declined": {
+    "en": "All right. Tell me whenever you want to continue.",
+    "ur": "ٹھیک ہے۔ جب جاری کرنا ہو، بتائیے۔",
+    "ar": "حسناً. أخبروني متى تريدون المتابعة."
+  },
+  "info_where": {
+    "en": "The location is {location}.",
+    "ur": "پتہ یہ ہے: {location}۔",
+    "ar": "الموقع هو {location}."
+  },
+  "info_services": {
+    "en": "This covers {services}.",
+    "ur": "یہ ان چیزوں کے بارے میں ہے: {services}۔",
+    "ar": "يشمل هذا {services}."
+  },
+  "info_hours": {
+    "en": "The hours are {hours}.",
+    "ur": "اوقات یہ ہیں: {hours}۔",
+    "ar": "الساعات هي {hours}."
+  },
+  "disabled": {
+    "en": "That is turned off. I can help with: {allowed}.",
+    "ur": "یہ بند ہے۔ میں ان میں مدد کر سکتا ہوں: {allowed}۔",
+    "ar": "هذا متوقف. يمكنني المساعدة في: {allowed}."
+  },
+  "job_labels": {
+    "answer": {
+      "en": "questions",
+      "ur": "سوال",
+      "ar": "الأسئلة"
+    },
+    "book": {
+      "en": "arrangements",
+      "ur": "انتظام",
+      "ar": "الترتيب"
+    },
+    "remind": {
+      "en": "reminders",
+      "ur": "یاددہانی",
+      "ar": "التذكير"
+    },
+    "review": {
+      "en": "feedback",
+      "ur": "رائے",
+      "ar": "الرأي"
+    },
+    "recover": {
+      "en": "starting again",
+      "ur": "دوبارہ شروع",
+      "ar": "الإعادة"
+    }
+  },
+  "lexicon": {
+    "urdu_marks": "ٹڈڑںپچژےھ",
+    "urdu_words": [
+      "ہے",
+      "کیا",
+      "مجھے",
+      "آپ",
+      "چاہیے",
+      "نام"
+    ],
+    "roman_urdu": [
+      "mujhe",
+      "chahiye"
+    ],
+    "yes": [
+      "yes",
+      "yeah",
+      "yep",
+      "ok",
+      "okay",
+      "sure",
+      "please",
+      "confirm",
+      "ہاں",
+      "جی",
+      "ٹھیک",
+      "ٹھیک ہے",
+      "بالکل",
+      "نعم",
+      "تمام",
+      "حاضر"
+    ],
+    "yes_prefixes": [
+      "yes "
+    ],
+    "no": [
+      "no",
+      "nope",
+      "nah",
+      "نہیں",
+      "لا",
+      "لأ"
+    ],
+    "greetings": [
+      "hi",
+      "hello",
+      "hey",
+      "salam",
+      "salaam",
+      "السلام علیکم",
+      "السلام عليكم",
+      "سلام",
+      "مرحبا",
+      "مرحباً",
+      "ہیلو"
+    ],
+    "punct": [
+      "!",
+      "?",
+      ".",
+      "،",
+      ","
+    ],
+    "trim": " .,،",
+    "email_subject": {
+      "en": "Re: your message to {name}",
+      "ur": "{name} کا جواب",
+      "ar": "رد من {name}"
+    },
+    "review": [
+      "review",
+      "rating",
+      "feedback",
+      "رائے",
+      "ریویو",
+      "تقييم",
+      "رأي"
+    ],
+    "remind": [
+      "remind",
+      "reminder",
+      "یاددہانی",
+      "تذكير",
+      "ذكرني"
+    ],
+    "recover": [
+      "missed",
+      "reschedule",
+      "start over",
+      "دوبارہ",
+      "فائت",
+      "إعادة",
+      "مرة أخرى"
+    ],
+    "book": [
+      "book",
+      "appointment",
+      "schedule",
+      "arrange",
+      "reserve",
+      "بک",
+      "ملاقات",
+      "انتظام",
+      "حجز",
+      "موعد",
+      "ترتيب"
+    ],
+    "where": [
+      "where",
+      "location",
+      "address",
+      "پتہ",
+      "کہاں",
+      "عنوان",
+      "موقع",
+      "أين"
+    ],
+    "services": [
+      "service",
+      "services",
+      "خدمات",
+      "کیا کرتے"
+    ],
+    "hours": [
+      "hour",
+      "hours",
+      "open",
+      "اوقات",
+      "ساعات",
+      "متى"
+    ],
+    "name_patterns": [
+      "(?i)(?:my name is|i am|i'm|this is|name is)\\s+([A-Za-z][A-Za-z .'-]{0,40})",
+      "میرا نام\\s+(.+?)(?:\\s+ہے|\\s+ہوں|,|،|$)",
+      "(?:اسمي|اسمى)\\s+([^\\s،,.]{1,30})"
+    ],
+    "rating_words": {
+      "one": 1,
+      "two": 2,
+      "three": 3,
+      "four": 4,
+      "five": 5,
+      "ایک": 1,
+      "دو": 2,
+      "تین": 3,
+      "چار": 4,
+      "پانچ": 5,
+      "واحد": 1,
+      "اثنان": 2,
+      "اثنين": 2,
+      "ثلاثة": 3,
+      "أربعة": 4,
+      "اربعة": 4,
+      "خمسة": 5
+    }
+  },
+  "samples": [
+    {
+      "label": "English",
+      "text": "Hello, I need some help."
+    },
+    {
+      "label": "اردو",
+      "text": "السلام علیکم، مجھے مدد چاہیے۔"
+    },
+    {
+      "label": "العربية",
+      "text": "مرحباً، أحتاج إلى مساعدة."
+    }
+  ]
+}
