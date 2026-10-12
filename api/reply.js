@@ -80,11 +80,8 @@ export default async function handler(req, res) {
 
     const generated = await generateText({
       model: MODEL,
-      messages: [
-        { role: "system", content: instructions({ business, allowed, language, channel, voice }) },
-        ...history,
-        { role: "user", content: message.slice(0, 2000) },
-      ],
+      instructions: instructions({ business, allowed, language, channel, voice }),
+      messages: [...history, { role: "user", content: message.slice(0, 2000) }],
     });
 
     const { text, outcome } = splitOutcome(generated.text);
