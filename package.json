@@ -7,7 +7,6 @@
     "node": "22.x"
   },
   "dependencies": {
-    "ai": "^7.0.137",
-    "edge-tts-universal": "^1.4.0"
+    "ai": "^7.0.137"
   }
 }

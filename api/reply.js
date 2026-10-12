@@ -1,45 +1,6 @@
-import { generateText } from "ai";
-import { Communicate } from "edge-tts-universal";
+import { generateSpeech, generateText } from "ai";
 
 const MODEL = "google/gemini-2.5-flash-lite";
-
-const VOICES = {
-  "en:us:female": "en-US-JennyNeural",
-  "en:us:male": "en-US-GuyNeural",
-  "en:gb:female": "en-GB-SoniaNeural",
-  "en:gb:male": "en-GB-RyanNeural",
-  "en:in:female": "en-IN-NeerjaNeural",
-  "en:in:male": "en-IN-PrabhatNeural",
-  "ur:pk:female": "ur-PK-UzmaNeural",
-  "ur:pk:male": "ur-PK-AsadNeural",
-  "ar:sa:female": "ar-SA-ZariyahNeural",
-  "ar:sa:male": "ar-SA-HamedNeural",
-  "ar:ae:female": "ar-AE-FatimaNeural",
-  "ar:ae:male": "ar-AE-HamdanNeural",
-  "ar:eg:female": "ar-EG-SalmaNeural",
-  "ar:eg:male": "ar-EG-ShakirNeural",
-  "ar:lb:female": "ar-LB-LaylaNeural",
-  "ar:lb:male": "ar-LB-RamiNeural",
-};
-
-const VOICE_LABELS = {
-  "en-US-JennyNeural": "American English, female",
-  "en-US-GuyNeural": "American English, male",
-  "en-GB-SoniaNeural": "British English, female",
-  "en-GB-RyanNeural": "British English, male",
-  "en-IN-NeerjaNeural": "South Asian English, female",
-  "en-IN-PrabhatNeural": "South Asian English, male",
-  "ur-PK-UzmaNeural": "Pakistani Urdu, female",
-  "ur-PK-AsadNeural": "Pakistani Urdu, male",
-  "ar-SA-ZariyahNeural": "Saudi Arabic, female",
-  "ar-SA-HamedNeural": "Saudi Arabic, male",
-  "ar-AE-FatimaNeural": "Emirati Arabic, female",
-  "ar-AE-HamdanNeural": "Emirati Arabic, male",
-  "ar-EG-SalmaNeural": "Egyptian Arabic, female",
-  "ar-EG-ShakirNeural": "Egyptian Arabic, male",
-  "ar-LB-LaylaNeural": "Lebanese Arabic, female",
-  "ar-LB-RamiNeural": "Lebanese Arabic, male",
-};
 
 const ACCENTS = {
   en: new Set(["us", "gb", "in"]),
@@ -75,12 +36,12 @@ export default async function handler(req, res) {
       : "whatsapp";
     const language = locked === "auto" ? detect(message) : locked;
     const accent = accentFor(language, payload.accents || {});
-    const voice = VOICES[`${language}:${accent}:${gender}`];
+    const voice = gender === "male" ? "onyx" : "nova";
     const history = sanitizeHistory(payload.history);
 
     const generated = await generateText({
       model: MODEL,
-      instructions: instructions({ business, allowed, language, channel, voice }),
+      instructions: instructions({ business, allowed, language, channel, gender }),
       messages: [...history, { role: "user", content: message.slice(0, 2000) }],
       reasoning: "none",
       temperature: 0.6,
@@ -95,7 +56,7 @@ export default async function handler(req, res) {
       language,
       accent,
       voice,
-      voiceLabel: VOICE_LABELS[voice],
+      voiceLabel: `${language === "ur" ? "Urdu" : language === "ar" ? "Arabic" : "English"}, ${gender}`,
       outcome,
       dir: language === "en" ? "ltr" : "rtl",
       audio: null,
@@ -103,8 +64,7 @@ export default async function handler(req, res) {
 
     if (payload.speak !== false) {
       try {
-        const rate = channel === "phone" ? "-8%" : "+0%";
-        result.audio = await speak(spoken, voice, rate);
+        result.audio = await speak(spoken, voice);
       } catch (error) {
         result.audioError = error instanceof Error ? error.message : "Voice unavailable.";
       }
@@ -117,7 +77,7 @@ export default async function handler(req, res) {
   }
 }
 
-function instructions({ business, allowed, language, channel, voice }) {
+function instructions({ business, allowed, language, channel, gender }) {
   const languageRule =
     language === "en"
       ? "Reply only in spoken English."
@@ -130,7 +90,7 @@ function instructions({ business, allowed, language, channel, voice }) {
     `Hours: ${business.hours}. Services: ${business.services}.`,
     "Hold a normal conversation. Answer general questions as well as questions about this business.",
     languageRule,
-    `The voice that will speak your reply is ${VOICE_LABELS[voice]}. Write standard language, not a phonetic accent.`,
+    `The voice that will speak your reply is ${gender}. Write standard language, not a phonetic accent.`,
     length,
     "No markdown, lists, or emoji.",
     "Use the business facts only when the customer asks about the business. Do not invent prices, staff names, or appointment times.",
@@ -180,27 +140,14 @@ function fallback(language) {
   return "Could you say that another way?";
 }
 
-async function speak(text, voice, rate) {
-  const communicate = new Communicate(text, { voice, rate, connectionTimeout: 8000 });
-  const work = (async () => {
-    const chunks = [];
-    for await (const chunk of communicate.stream()) {
-      if (chunk.type === "audio" && chunk.data) chunks.push(Buffer.from(chunk.data));
-    }
-    if (!chunks.length) throw new Error("Voice unavailable.");
-    return Buffer.concat(chunks).toString("base64");
-  })();
-  let timer;
-  try {
-    return await Promise.race([
-      work,
-      new Promise((_, reject) => {
-        timer = setTimeout(() => reject(new Error("Voice timed out.")), 12000);
-      }),
-    ]);
-  } finally {
-    clearTimeout(timer);
-  }
+async function speak(text, voice) {
+  const result = await generateSpeech({
+    model: "openai/tts-1",
+    voice,
+    text,
+    abortSignal: AbortSignal.timeout(12000),
+  });
+  return result.audio.base64;
 }
 
 function cleanBusiness(raw) {
