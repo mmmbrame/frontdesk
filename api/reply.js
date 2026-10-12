@@ -1,5 +1,5 @@
 import { generateText } from "ai";
-import { EdgeTTS } from "edge-tts-universal";
+import { Communicate } from "edge-tts-universal";
 
 const MODEL = "google/gemini-2.5-flash-lite";
 
@@ -104,9 +104,7 @@ export default async function handler(req, res) {
     if (payload.speak !== false) {
       try {
         const rate = channel === "phone" ? "-8%" : "+0%";
-        const tts = new EdgeTTS(spoken, voice, { rate });
-        const { audio } = await tts.synthesize();
-        result.audio = Buffer.from(await audio.arrayBuffer()).toString("base64");
+        result.audio = await speak(spoken, voice, rate);
       } catch (error) {
         result.audioError = error instanceof Error ? error.message : "Voice unavailable.";
       }
@@ -180,6 +178,29 @@ function fallback(language) {
   if (language === "ur") return "براہ کرم اسے دوبارہ کہیے؟";
   if (language === "ar") return "هل يمكنكم قول ذلك بطريقة أخرى؟";
   return "Could you say that another way?";
+}
+
+async function speak(text, voice, rate) {
+  const communicate = new Communicate(text, { voice, rate, connectionTimeout: 8000 });
+  const work = (async () => {
+    const chunks = [];
+    for await (const chunk of communicate.stream()) {
+      if (chunk.type === "audio" && chunk.data) chunks.push(Buffer.from(chunk.data));
+    }
+    if (!chunks.length) throw new Error("Voice unavailable.");
+    return Buffer.concat(chunks).toString("base64");
+  })();
+  let timer;
+  try {
+    return await Promise.race([
+      work,
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error("Voice timed out.")), 12000);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function cleanBusiness(raw) {
