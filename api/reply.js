@@ -1,7 +1,7 @@
 import { generateText } from "ai";
 import { EdgeTTS } from "edge-tts-universal";
 
-const MODEL = "google/gemini-3.5-flash";
+const MODEL = "google/gemini-2.5-flash-lite";
 
 const VOICES = {
   "en:us:female": "en-US-JennyNeural",
@@ -82,6 +82,9 @@ export default async function handler(req, res) {
       model: MODEL,
       instructions: instructions({ business, allowed, language, channel, voice }),
       messages: [...history, { role: "user", content: message.slice(0, 2000) }],
+      reasoning: "none",
+      temperature: 0.6,
+      maxOutputTokens: 180,
     });
 
     const { text, outcome } = splitOutcome(generated.text);
