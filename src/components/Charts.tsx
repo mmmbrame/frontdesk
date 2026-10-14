@@ -15,11 +15,11 @@ import {
 import { fmt, pct } from "../format";
 
 const tooltipStyle = {
-  background: "#fffdf8",
-  border: "1px solid #e4d7c4",
+  background: "var(--chart-tip-bg)",
+  border: "1px solid var(--chart-tip-line)",
   borderRadius: 12,
   fontSize: 13,
-  color: "#1c1712",
+  color: "var(--chart-tip-ink)",
 };
 
 export function cutLabel(value: string, max = 24): string {
@@ -50,11 +50,11 @@ export function HBars({
             width={148}
             axisLine={false}
             tickLine={false}
-            tick={{ fill: "#5e564e", fontSize: 12 }}
+            tick={{ fill: "var(--chart-axis)", fontSize: 12 }}
             tickFormatter={(value) => cutLabel(String(value), 22)}
           />
           <Tooltip
-            cursor={{ fill: "rgba(14,107,87,0.06)" }}
+            cursor={{ fill: "var(--chart-cursor)" }}
             contentStyle={tooltipStyle}
             formatter={(value) => [`${digits ? Number(value).toFixed(digits) : fmt(Number(value))}${suffix}`, ""]}
           />
@@ -126,9 +126,9 @@ export function AdmissionArea({
           const label = state?.activeLabel;
           if (label) onPick?.(String(label));
         }}>
-          <CartesianGrid stroke="#efe4d4" vertical={false} />
-          <XAxis dataKey="year" tick={{ fill: "#5e564e", fontSize: 12 }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fill: "#5e564e", fontSize: 12 }} axisLine={false} tickLine={false} width={40} />
+          <CartesianGrid stroke="var(--chart-grid)" vertical={false} />
+          <XAxis dataKey="year" tick={{ fill: "var(--chart-axis)", fontSize: 12 }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fill: "var(--chart-axis)", fontSize: 12 }} axisLine={false} tickLine={false} width={40} />
           <Tooltip contentStyle={tooltipStyle} formatter={(value, name) => [fmt(Number(value)), name]} />
           <Area type="monotone" dataKey="female" name="Female" stackId="1" stroke="#c24d2c" fill="#c24d2c" fillOpacity={0.85} isAnimationActive={false} />
           <Area type="monotone" dataKey="male" name="Male" stackId="1" stroke="#2a527a" fill="#2a527a" fillOpacity={0.85} isAnimationActive={false} />
@@ -162,7 +162,7 @@ export function StackedBars({
             width={148}
             axisLine={false}
             tickLine={false}
-            tick={{ fill: "#5e564e", fontSize: 12 }}
+            tick={{ fill: "var(--chart-axis)", fontSize: 12 }}
             tickFormatter={(value) => cutLabel(String(value), 22)}
           />
           <Tooltip contentStyle={tooltipStyle} formatter={(value, name) => [fmt(Number(value)), name]} />

@@ -114,7 +114,7 @@ export function Heatmap({
                   className="heat-cell"
                   style={{
                     background: value ? `rgba(14, 107, 87, ${0.12 + tone * 0.88})` : "transparent",
-                    color: tone > 0.62 ? "#f7f3ec" : "#1c1712",
+                    color: tone > 0.62 ? "#f7f3ec" : "var(--heat-ink)",
                   }}
                   onClick={() => onPick(year, grade)}
                   title={`${year} · ${grade}: ${fmt(value)}`}

@@ -454,3 +454,70 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
 .dark .crumb { color: #a1a1aa; }
 .dark .crumb strong { color: #fafafa; }
 .sidebar-actions { margin-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.18); padding-top: 12px; }
+
+/* ---- Dark mode readability ----
+   Light-only surfaces and highlights get dark-theme counterparts here.
+   Chart and heat-map colors come from the variables below. */
+:root {
+  --heat-ink: #1c1712;
+  --chart-tip-bg: #fffdf8;
+  --chart-tip-line: #e4d7c4;
+  --chart-tip-ink: #1c1712;
+  --chart-axis: #5e564e;
+  --chart-grid: #efe4d4;
+  --chart-cursor: rgba(14, 107, 87, 0.06);
+}
+
+.dark {
+  --heat-ink: #fafafa;
+  --chart-tip-bg: #18181b;
+  --chart-tip-line: #3f3f46;
+  --chart-tip-ink: #fafafa;
+  --chart-axis: #a1a1aa;
+  --chart-grid: #27272a;
+  --chart-cursor: rgba(63, 181, 149, 0.1);
+}
+
+/* Selected segment / tab buttons: invert so the label stays readable */
+.dark .tabs button.on,
+.dark .mini.on,
+.dark .segment button.on {
+  background: #fafafa;
+  color: #0a0a0b;
+  border-color: #fafafa;
+}
+
+/* Table highlights */
+.dark table.data th button.on,
+.dark table.data td.hot { color: #7fd6b8; }
+.dark table.data td.hot { background: #1f2a24; }
+.dark table.data tbody tr:hover,
+.dark table.data tr.picked { background: #1c1c1f; color: #fafafa; }
+.dark table.data tr.picked td { color: #fafafa; }
+
+/* Register header, pyramid rows, ribbon, bars, highlights */
+.dark .reg.head { background: #121214; color: #a1a1aa; }
+.dark .reg.head button.on { color: #7fd6b8; }
+.dark .ribbon button { color: #fafafa; }
+.dark .pyramid-row:hover,
+.dark .pyramid-row.on { background: #1c1c1f; }
+.dark .grade-bars i,
+.dark .quality-bars i { background: #27272a; }
+.dark mark { background: #5c4a1a; color: #fff7e0; }
+.dark .insights p { color: #d4d4d8; }
+
+/* Heat map cell text */
+.heat-cell { color: var(--heat-ink); }
+
+/* Chart colors: Recharts tooltip is inline-styled, so use variables;
+   axis and grid are SVG presentation attributes, so override via CSS. */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: var(--chart-tip-bg) !important;
+  border-color: var(--chart-tip-line) !important;
+  color: var(--chart-tip-ink) !important;
+}
+.recharts-tooltip-wrapper .recharts-tooltip-item,
+.recharts-tooltip-wrapper .recharts-tooltip-label { color: var(--chart-tip-ink) !important; }
+.recharts-cartesian-axis-tick-value { fill: var(--chart-axis); }
+.recharts-cartesian-grid line { stroke: var(--chart-grid); }
+.recharts-tooltip-cursor { fill: var(--chart-cursor); }
