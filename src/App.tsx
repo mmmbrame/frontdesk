@@ -246,7 +246,7 @@ export function App() {
 
   return (
     <div className={sideOpen ? "shell" : "shell collapsed"}>
-      <aside className={sideOpen ? "sidebar open" : "sidebar"}>
+      <aside className={sideOpen ? "sidebar open" : "sidebar collapsed"}>
         <div className="sidebar-brand">
           <span className="logo" aria-hidden="true">
             <Database size={16} />
@@ -267,6 +267,8 @@ export function App() {
                     key={item.id}
                     type="button"
                     className={tab === item.id ? "nav-link on" : "nav-link"}
+                    data-label={item.label}
+                    aria-label={item.label}
                     onClick={() => selectModule(item.id)}
                   >
                     <Icon size={16} />
@@ -279,11 +281,17 @@ export function App() {
           ))}
         </nav>
         <div className="nav-group sidebar-actions">
-          <button type="button" className="nav-link" onClick={() => setDark((value) => !value)}>
+          <button
+            type="button"
+            className="nav-link"
+            data-label={dark ? "Light mode" : "Dark mode"}
+            aria-label={dark ? "Light mode" : "Dark mode"}
+            onClick={() => setDark((value) => !value)}
+          >
             {dark ? <Sun size={16} /> : <Moon size={16} />}
             <span>{dark ? "Light mode" : "Dark mode"}</span>
           </button>
-          <button type="button" className="nav-link" onClick={signOut}>
+          <button type="button" className="nav-link" data-label="Sign out" aria-label="Sign out" onClick={signOut}>
             <LogOut size={16} />
             <span>Sign out</span>
           </button>

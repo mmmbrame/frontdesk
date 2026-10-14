@@ -407,10 +407,35 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
 .filter-panel .sidebar-foot .clear { width: auto; }
 .filter-panel .sidebar-foot span { text-align: right; }
 
-/* ---- Collapsible sidebar (desktop). Mobile uses the overlay rules above. ---- */
+/* ---- Collapsible sidebar (desktop): collapses to an icon rail with hover labels. ---- */
+.shell { transition: grid-template-columns 0.2s ease; }
 @media (min-width: 861px) {
-  .shell.collapsed { grid-template-columns: minmax(0, 1fr); }
-  .shell.collapsed .sidebar { display: none; }
+  .shell.collapsed { grid-template-columns: 64px minmax(0, 1fr); }
+  .sidebar.collapsed { padding: 16px 8px 24px; overflow: visible; }
+  .sidebar.collapsed .sidebar-brand { justify-content: center; padding: 6px 0 14px; }
+  .sidebar.collapsed .sidebar-brand > div,
+  .sidebar.collapsed .nav-label,
+  .sidebar.collapsed .nav-link span,
+  .sidebar.collapsed .nav-link em { display: none; }
+  .sidebar.collapsed .nav { gap: 10px; }
+  .sidebar.collapsed .nav-group { gap: 4px; }
+  .sidebar.collapsed .nav-link { justify-content: center; padding: 10px 0; position: relative; }
+  .sidebar.collapsed .nav-link:hover::after {
+    content: attr(data-label);
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    background: #0a0a0b;
+    color: #ffffff;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .sidebar.collapsed .sidebar-actions { border-top-color: rgba(255, 255, 255, 0.18); }
 }
 
 /* ---- Dark mode (content page and top bar; the sidebar stays green) ---- */
