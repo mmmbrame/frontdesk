@@ -46,3 +46,30 @@
     border-color: var(--color-border);
   }
 }
+
+/* Dark mode: the `dark` class on <html> swaps the shadcn tokens. */
+.dark {
+  --color-background: #0a0a0b;
+  --color-foreground: #fafafa;
+  --color-card: #121214;
+  --color-card-foreground: #fafafa;
+  --color-popover: #121214;
+  --color-popover-foreground: #fafafa;
+  --color-primary: #3fb598;
+  --color-primary-foreground: #0a0a0b;
+  --color-secondary: #1c1c1f;
+  --color-secondary-foreground: #fafafa;
+  --color-muted: #1c1c1f;
+  --color-muted-foreground: #a1a1aa;
+  --color-accent: #1c1c1f;
+  --color-accent-foreground: #fafafa;
+  --color-destructive: #f87171;
+  --color-border: #27272a;
+  --color-input: #27272a;
+  --color-ring: #3fb598;
+  --bg: #0a0a0b;
+  --ink: #fafafa;
+  --muted: #a1a1aa;
+  --card: #121214;
+  --line: #27272a;
+}

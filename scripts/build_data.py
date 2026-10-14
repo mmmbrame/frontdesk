@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Normalize the PEN student workbook into public/data.json.
+"""Normalize the PEN student workbook into private/data.json.
 
 The combined sheet named "PSRP-I Student Data" already contains every PEIMA,
 PSRP-I, and PSRP-II row. The standalone PEIMA and PSRP-II sheets are excluded
@@ -18,7 +18,7 @@ import openpyxl
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKBOOK = ROOT.parent / "Student Data PEIMA, PSRP-I,II, ESP, adopted Punjab, Sindhxlsx.xlsx"
-OUT = ROOT / "public" / "data.json"
+OUT = ROOT / "private" / "data.json"
 REFERENCE = date(2026, 10, 14)
 
 MONTHS = {

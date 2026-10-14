@@ -12,8 +12,11 @@ function tri(value: string): Tri {
   return "Unknown";
 }
 
+export class UnauthorizedError extends Error {}
+
 export async function loadDataset(): Promise<Dataset> {
-  const response = await fetch("/data.json");
+  const response = await fetch("/api/data", { credentials: "same-origin" });
+  if (response.status === 401) throw new UnauthorizedError("Sign in to view the atlas.");
   if (!response.ok) throw new Error("The student file could not be loaded.");
   const raw = (await response.json()) as Raw;
   const dict = (field: string, index: number) => raw.dicts[field]?.[index] ?? "Unknown";
