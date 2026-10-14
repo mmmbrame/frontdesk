@@ -88,12 +88,18 @@ function pickDim(filters: FilterState, dim: Dim, value: string): FilterState {
   };
 }
 
+function readModule(): TabId {
+  const requested = new URLSearchParams(location.search).get("m");
+  return TABS.some((item) => item.id === requested) ? (requested as TabId) : "overview";
+}
+
 export function App() {
   const [data, setData] = useState<Dataset | null>(null);
   const [error, setError] = useState("");
   const [filters, setFilters] = useState<FilterState>(() => readFilters());
-  const [tab, setTab] = useState<TabId>("overview");
+  const [tab, setTab] = useState<TabId>(() => readModule());
   const [menu, setMenu] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(true);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -129,6 +135,18 @@ export function App() {
     }
   }, [filters, edge, data]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("m") === tab) return;
+    params.set("m", tab);
+    history.replaceState(null, "", `${location.pathname}?${params.toString()}${location.hash}`);
+  }, [tab]);
+
+  function selectModule(next: TabId) {
+    setTab(next);
+    setMenu(false);
+  }
+
   function toggle(key: ListKey, value: string) {
     setFilters((current) => pickDim(current, key, value));
   }
@@ -158,22 +176,19 @@ export function App() {
       <aside className={menu ? "sidebar open" : "sidebar"}>
         <div className="brand">
           <p className="kicker">PEN · 2026</p>
-          <strong>Filters</strong>
-          <p>Tick a value, or leave it clear to keep everyone.</p>
+          <strong>Enrollment Atlas</strong>
+          <p>Choose a module. Filters apply to every page.</p>
         </div>
-        <Filters
-          students={data.students}
-          filters={filters}
-          filteredCount={filtered.length}
-          edge={edge}
-          active={isFiltered(filters, edge)}
-          onToggle={toggle}
-          onSetList={(key, values) => setFilters((current) => ({ ...current, [key]: values }))}
-          onPatch={(partial) => setFilters((current) => ({ ...current, ...partial }))}
-          onReset={() => setFilters(EMPTY_FILTERS)}
-        />
+        <nav className="modules" aria-label="Modules">
+          {TABS.map((item) => (
+            <button key={item.id} type="button" className={tab === item.id ? "on" : ""} onClick={() => selectModule(item.id)}>
+              {item.label}
+              {item.id === "students" ? <em>{fmt(filtered.length)}</em> : null}
+            </button>
+          ))}
+        </nav>
       </aside>
-      {menu ? <button className="scrim" type="button" aria-label="Close filters" onClick={() => setMenu(false)} /> : null}
+      {menu ? <button className="scrim" type="button" aria-label="Close menu" onClick={() => setMenu(false)} /> : null}
 
       <main className="main">
         <header className="top">
@@ -187,7 +202,7 @@ export function App() {
           </div>
           <div className="search">
             <button type="button" className="ghost menu-btn" onClick={() => setMenu(true)}>
-              Filters
+              Modules
             </button>
             <input
               ref={searchRef}
@@ -199,6 +214,35 @@ export function App() {
             <span className="slash">/</span>
           </div>
         </header>
+
+        <section className="filter-panel" aria-label="Filters">
+          <div className="filter-panel-head">
+            <div>
+              <strong>Filters</strong>
+              <span className="fine">
+                {isFiltered(filters, edge)
+                  ? `${chips.length} active. Clear a value to widen the results.`
+                  : "Tick a value, or leave it clear to keep everyone."}
+              </span>
+            </div>
+            <button type="button" className="ghost" onClick={() => setFilterOpen((value) => !value)}>
+              {filterOpen ? "Hide filters" : "Show filters"}
+            </button>
+          </div>
+          {filterOpen ? (
+            <Filters
+              students={data.students}
+              filters={filters}
+              filteredCount={filtered.length}
+              edge={edge}
+              active={isFiltered(filters, edge)}
+              onToggle={toggle}
+              onSetList={(key, values) => setFilters((current) => ({ ...current, [key]: values }))}
+              onPatch={(partial) => setFilters((current) => ({ ...current, ...partial }))}
+              onReset={() => setFilters(EMPTY_FILTERS)}
+            />
+          ) : null}
+        </section>
 
         <div className="status">
           <strong>
@@ -213,15 +257,6 @@ export function App() {
             {!chips.length ? <span className="fine">No filters yet. Click any chart to narrow the atlas.</span> : null}
           </div>
         </div>
-
-        <nav className="tabs">
-          {TABS.map((item) => (
-            <button key={item.id} type="button" className={tab === item.id ? "on" : ""} onClick={() => setTab(item.id)}>
-              {item.label}
-              {item.id === "students" ? <em>{fmt(filtered.length)}</em> : null}
-            </button>
-          ))}
-        </nav>
 
         {tab === "overview" ? (
           <Overview

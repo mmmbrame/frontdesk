@@ -308,3 +308,54 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
   .main { padding: 18px 14px 48px; }
   .kpis, .insights, .quality-bars { grid-template-columns: 1fr; }
 }
+
+/* ---- Module navigation (sidebar) ---- */
+.modules { display: grid; gap: 6px; margin-top: 18px; }
+.modules button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 15px;
+}
+.modules button:hover { border-color: var(--line); background: var(--card); }
+.modules button.on { background: var(--ink); color: #f7f1e6; }
+.modules button em { font-style: normal; color: var(--gold); font-size: 13px; }
+.modules button.on em { color: #f2d28a; }
+
+/* ---- Filter panel (content area, above every module) ---- */
+.filter-panel {
+  margin-top: 22px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px 18px 12px;
+  box-shadow: var(--shadow);
+}
+.filter-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.filter-panel-head strong { display: block; font-family: var(--serif); font-size: 22px; line-height: 1.1; }
+.filter-panel-head .fine { margin: 2px 0 0; }
+.filter-panel .filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0 24px;
+  margin-top: 8px;
+}
+.filter-panel .filters details { padding: 8px 0; }
+.filter-panel .checks { max-height: 220px; overflow: auto; padding-right: 4px; }
+.filter-panel .sidebar-foot {
+  position: static;
+  background: none;
+  grid-column: 1 / -1;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.filter-panel .sidebar-foot .clear { width: auto; }
+.filter-panel .sidebar-foot span { text-align: right; }
