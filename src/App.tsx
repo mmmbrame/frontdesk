@@ -1,4 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Compass,
+  Database,
+  GitCompare,
+  LayoutDashboard,
+  Map as MapIcon,
+  PanelLeft,
+  School,
+  ShieldCheck,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { Compare } from "./components/Compare";
 import { Explore } from "./components/Explore";
 import { Filters } from "./components/Filters";
@@ -21,15 +33,27 @@ import {
   type Tri,
 } from "./types";
 
-const TABS: { id: TabId; label: string }[] = [
-  { id: "overview", label: "Overview" },
-  { id: "explore", label: "Explore" },
-  { id: "geography", label: "Geography" },
-  { id: "schools", label: "Schools" },
-  { id: "students", label: "Students" },
-  { id: "compare", label: "Compare" },
-  { id: "quality", label: "Quality" },
+const NAV: { label: string; items: { id: TabId; label: string; icon: LucideIcon }[] }[] = [
+  { label: "Dashboard", items: [{ id: "overview", label: "Overview", icon: LayoutDashboard }] },
+  {
+    label: "Analysis",
+    items: [
+      { id: "explore", label: "Explore", icon: Compass },
+      { id: "geography", label: "Geography", icon: MapIcon },
+      { id: "compare", label: "Compare", icon: GitCompare },
+    ],
+  },
+  {
+    label: "Records",
+    items: [
+      { id: "schools", label: "Schools", icon: School },
+      { id: "students", label: "Students", icon: Users },
+    ],
+  },
+  { label: "Data", items: [{ id: "quality", label: "Quality", icon: ShieldCheck }] },
 ];
+
+const TABS: { id: TabId; label: string }[] = NAV.flatMap((group) => group.items.map(({ id, label }) => ({ id, label })));
 
 function readFilters(): FilterState {
   const raw = location.hash.replace(/^#/, "");
@@ -174,17 +198,35 @@ export function App() {
   return (
     <div className={sideOpen ? "shell" : "shell collapsed"}>
       <aside className={sideOpen ? "sidebar open" : "sidebar"}>
-        <div className="brand">
-          <p className="kicker">PEN · 2026</p>
-          <strong>Enrollment Atlas</strong>
-          <p>Choose a module. Filters apply to every page.</p>
+        <div className="sidebar-brand">
+          <span className="logo" aria-hidden="true">
+            <Database size={16} />
+          </span>
+          <div>
+            <strong>PEN Atlas</strong>
+            <span>Enrollment 2026</span>
+          </div>
         </div>
-        <nav className="modules" aria-label="Modules">
-          {TABS.map((item) => (
-            <button key={item.id} type="button" className={tab === item.id ? "on" : ""} onClick={() => selectModule(item.id)}>
-              {item.label}
-              {item.id === "students" ? <em>{fmt(filtered.length)}</em> : null}
-            </button>
+        <nav className="nav" aria-label="Modules">
+          {NAV.map((group) => (
+            <div className="nav-group" key={group.label}>
+              <p className="nav-label">{group.label}</p>
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={tab === item.id ? "nav-link on" : "nav-link"}
+                    onClick={() => selectModule(item.id)}
+                  >
+                    <Icon size={16} />
+                    <span>{item.label}</span>
+                    {item.id === "students" ? <em>{fmt(filtered.length)}</em> : null}
+                  </button>
+                );
+              })}
+            </div>
           ))}
         </nav>
       </aside>
@@ -193,6 +235,20 @@ export function App() {
       ) : null}
 
       <main className="main">
+        <div className="content-bar">
+          <button
+            type="button"
+            className="icon-btn"
+            aria-label={sideOpen ? "Hide sidebar" : "Show sidebar"}
+            title={sideOpen ? "Hide sidebar" : "Show sidebar"}
+            onClick={() => setSideOpen((value) => !value)}
+          >
+            <PanelLeft size={18} />
+          </button>
+          <span className="crumb">
+            Enrollment Atlas / <strong>{TABS.find((item) => item.id === tab)?.label}</strong>
+          </span>
+        </div>
         <header className="top">
           <div>
             <p className="kicker">Enrollment atlas · academic year 2026</p>
@@ -203,9 +259,6 @@ export function App() {
             </p>
           </div>
           <div className="search">
-            <button type="button" className="ghost" onClick={() => setSideOpen((value) => !value)}>
-              {sideOpen ? "Hide menu" : "Show menu"}
-            </button>
             <input
               ref={searchRef}
               value={filters.q}

@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
+import type { ColumnDef } from "@tanstack/react-table";
 import { countLabel, fmt, pct } from "../format";
 import { schoolGroups, type SchoolGroup } from "../query";
 import type { Student, TabId } from "../types";
+import { DataTable } from "./ui/data-table";
 import { Panel } from "./Visuals";
 
 export function Schools({
@@ -19,6 +21,40 @@ export function Schools({
   );
   const current = groups.find((group) => group.key === selected) ?? null;
 
+  const columns = useMemo<ColumnDef<SchoolGroup, unknown>[]>(
+    () => [
+      {
+        id: "school",
+        accessorKey: "school",
+        header: "School",
+        cell: ({ row }) => (
+          <div>
+            <strong>{row.original.school}</strong>
+            <div className="text-xs text-muted-foreground">EMIS {row.original.emis || "—"}</div>
+          </div>
+        ),
+      },
+      { id: "program", accessorKey: "program", header: "Program" },
+      { id: "district", accessorKey: "district", header: "District" },
+      { id: "tehsil", accessorKey: "tehsil", header: "Tehsil" },
+      { id: "students", accessorKey: "students", header: "Students", cell: ({ getValue }) => fmt(getValue<number>()) },
+      {
+        id: "female",
+        accessorFn: (group) => (group.students ? (group.female / group.students) * 100 : 0),
+        header: "Female",
+        cell: ({ getValue }) => pct(getValue<number>()),
+      },
+      { id: "disability", accessorKey: "disability", header: "Disability", cell: ({ getValue }) => fmt(getValue<number>()) },
+      {
+        id: "missingBform",
+        accessorFn: (group) => (group.students ? (group.missingBform / group.students) * 100 : 0),
+        header: "Missing B-Form",
+        cell: ({ getValue }) => pct(getValue<number>()),
+      },
+    ],
+    [],
+  );
+
   return (
     <div className="stack school-layout">
       <Panel
@@ -34,39 +70,14 @@ export function Schools({
           />
         }
       >
-        <div className="table-scroll tall">
-          <table className="data">
-            <thead>
-              <tr>
-                <th>School</th>
-                <th>Program</th>
-                <th>District</th>
-                <th>Tehsil</th>
-                <th>Students</th>
-                <th>Female</th>
-                <th>Disability</th>
-                <th>Missing B-Form</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visible.map((group) => (
-                <tr key={group.key} className={selected === group.key ? "picked" : ""} onClick={() => setSelected(group.key)}>
-                  <td>
-                    <strong>{group.school}</strong>
-                    <small>EMIS {group.emis || "—"}</small>
-                  </td>
-                  <td>{group.program}</td>
-                  <td>{group.district}</td>
-                  <td>{group.tehsil}</td>
-                  <td>{fmt(group.students)}</td>
-                  <td>{pct(group.students ? (group.female / group.students) * 100 : 0)}</td>
-                  <td>{fmt(group.disability)}</td>
-                  <td>{pct(group.students ? (group.missingBform / group.students) * 100 : 0)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          columns={columns}
+          data={visible}
+          pageSize={25}
+          onRowClick={(group) => setSelected(group.key)}
+          isSelected={(group) => group.key === selected}
+          emptyText="No schools match this search."
+        />
       </Panel>
       {current ? <Profile group={current} onOpen={() => onOpenStudents(current.school, "students")} onClose={() => setSelected(null)} /> : null}
     </div>

@@ -1,40 +1,60 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import type { ColumnDef } from "@tanstack/react-table";
 import { countLabel, downloadCsv, escapeRegExp } from "../format";
 import type { Student } from "../types";
+import { DataTable } from "./ui/data-table";
 import { Panel } from "./Visuals";
 
-type SortKey = "name" | "father" | "gender" | "grade" | "school" | "district" | "program" | "age" | "admitted";
-
-const ROW_H = 52;
-
 export function Students({ rows, query }: { rows: Student[]; query: string }) {
-  const [sort, setSort] = useState<{ key: SortKey; dir: "asc" | "desc" }>({ key: "name", dir: "asc" });
-  const [scrollTop, setScrollTop] = useState(0);
-  const [height, setHeight] = useState(560);
+  const tokens = useMemo(
+    () => query.toLowerCase().split(/\s+/).filter((token) => token.length > 1),
+    [query],
+  );
 
-  const sorted = useMemo(() => {
-    const copy = rows.slice();
-    const factor = sort.dir === "asc" ? 1 : -1;
-    copy.sort((a, b) => {
-      const av = read(a, sort.key);
-      const bv = read(b, sort.key);
-      if (typeof av === "number" && typeof bv === "number") return (av - bv) * factor;
-      return String(av).localeCompare(String(bv)) * factor;
-    });
-    return copy;
-  }, [rows, sort]);
-
-  const start = Math.max(0, Math.floor(scrollTop / ROW_H) - 6);
-  const end = Math.min(sorted.length, start + Math.ceil(height / ROW_H) + 12);
-  const visible = sorted.slice(start, end);
-  const tokens = query.toLowerCase().split(/\s+/).filter((token) => token.length > 1);
-
-  function toggle(key: SortKey) {
-    setSort((current) =>
-      current.key === key ? { key, dir: current.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" },
-    );
-    setScrollTop(0);
-  }
+  const columns = useMemo<ColumnDef<Student, unknown>[]>(
+    () => [
+      {
+        id: "name",
+        accessorKey: "name",
+        header: "Student",
+        cell: ({ row }) => (
+          <div>
+            <strong>{highlight(row.original.name, tokens)}</strong>
+            <div className="text-xs text-muted-foreground">{row.original.tehsil}</div>
+          </div>
+        ),
+      },
+      { id: "father", accessorKey: "father", header: "Father", cell: ({ row }) => highlight(row.original.father, tokens) },
+      { id: "gender", accessorKey: "gender", header: "Gender" },
+      {
+        id: "grade",
+        accessorFn: (student) => `${student.grade} ${student.section}`.trim(),
+        header: "Grade",
+      },
+      { id: "school", accessorKey: "school", header: "School", cell: ({ row }) => highlight(row.original.school, tokens) },
+      { id: "district", accessorKey: "district", header: "District" },
+      { id: "program", accessorKey: "program", header: "Program" },
+      {
+        id: "bform",
+        accessorKey: "bform",
+        header: "B-Form",
+        cell: ({ row }) => <span className="font-mono text-xs">{highlight(row.original.bform || "—", tokens)}</span>,
+      },
+      {
+        id: "age",
+        accessorFn: (student) => student.age,
+        header: "Age",
+        cell: ({ row }) => (row.original.age < 0 ? "—" : row.original.age),
+      },
+      {
+        id: "admitted",
+        accessorKey: "admitYear",
+        header: "Admitted",
+        cell: ({ row }) => row.original.admitYear || "—",
+      },
+    ],
+    [tokens],
+  );
 
   function exportCsv() {
     const header = [
@@ -64,7 +84,7 @@ export function Students({ rows, query }: { rows: Student[]; query: string }) {
       "Afghan",
       "Source",
     ];
-    const body = sorted.map((student) => [
+    const body = rows.map((student) => [
       student.name,
       student.father,
       student.gender,
@@ -97,86 +117,17 @@ export function Students({ rows, query }: { rows: Student[]; query: string }) {
   return (
     <Panel
       kicker="Register"
-      title={countLabel(sorted.length, "student")}
-      hint="Scroll the register. Search from the top bar matches name, father, B-Form, EMIS, school, and place together."
+      title={countLabel(rows.length, "student")}
+      hint="Click a column header to sort. Search from the top bar matches name, father, B-Form, EMIS, school, and place together."
       action={
         <button type="button" className="solid" onClick={exportCsv}>
           Export this view
         </button>
       }
     >
-      <div
-        className="table-scroll tall"
-        onScroll={(event) => {
-          setScrollTop(event.currentTarget.scrollTop);
-          setHeight(event.currentTarget.clientHeight);
-        }}
-      >
-        <div className="reg head">
-          <Head label="Student" k="name" sort={sort} onSort={toggle} />
-          <Head label="Father" k="father" sort={sort} onSort={toggle} />
-          <Head label="Gender" k="gender" sort={sort} onSort={toggle} />
-          <Head label="Grade" k="grade" sort={sort} onSort={toggle} />
-          <Head label="School" k="school" sort={sort} onSort={toggle} />
-          <Head label="District" k="district" sort={sort} onSort={toggle} />
-          <Head label="Program" k="program" sort={sort} onSort={toggle} />
-          <span>B-Form</span>
-          <Head label="Age" k="age" sort={sort} onSort={toggle} />
-          <Head label="Admitted" k="admitted" sort={sort} onSort={toggle} />
-        </div>
-        <div style={{ height: sorted.length * ROW_H, position: "relative" }}>
-          <div style={{ position: "absolute", top: start * ROW_H, left: 0, right: 0 }}>
-            {visible.map((student) => (
-              <div className="reg" key={`${student.emis}-${student.bform}-${student.name}-${student.admitted}`} style={{ height: ROW_H }}>
-                <span>
-                  <strong>{highlight(student.name, tokens)}</strong>
-                  <small>{student.tehsil}</small>
-                </span>
-                <span>{highlight(student.father, tokens)}</span>
-                <span>{student.gender}</span>
-                <span>
-                  {student.grade}
-                  {student.section ? ` ${student.section}` : ""}
-                </span>
-                <span>{highlight(student.school, tokens)}</span>
-                <span>{student.district}</span>
-                <span>{student.program}</span>
-                <span className="mono">{highlight(student.bform || "—", tokens)}</span>
-                <span>{student.age < 0 ? "—" : student.age}</span>
-                <span className="mono">{student.admitYear || "—"}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        {!sorted.length ? <p className="empty">No students match. Clear a filter or try fewer words.</p> : null}
-      </div>
+      <DataTable columns={columns} data={rows} pageSize={25} emptyText="No students match. Clear a filter or try fewer words." />
     </Panel>
   );
-}
-
-function Head({
-  label,
-  k,
-  sort,
-  onSort,
-}: {
-  label: string;
-  k: SortKey;
-  sort: { key: SortKey; dir: "asc" | "desc" };
-  onSort: (key: SortKey) => void;
-}) {
-  return (
-    <button type="button" className={sort.key === k ? "on" : ""} onClick={() => onSort(k)}>
-      {label}
-      {sort.key === k ? (sort.dir === "asc" ? " ↑" : " ↓") : ""}
-    </button>
-  );
-}
-
-function read(student: Student, key: SortKey): string | number {
-  if (key === "age") return student.age;
-  if (key === "admitted") return student.admitYear;
-  return student[key];
 }
 
 function highlight(text: string, tokens: string[]) {
