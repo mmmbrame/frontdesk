@@ -1,12 +1,23 @@
 {
-  "name": "frontdesk",
-  "version": "1.0.0",
+  "name": "pen-enrollment-atlas",
   "private": true,
+  "version": "1.0.0",
   "type": "module",
-  "engines": {
-    "node": "22.x"
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "ai": "^7.0.137"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "recharts": "^2.15.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
   }
 }
