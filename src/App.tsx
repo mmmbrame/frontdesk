@@ -98,7 +98,7 @@ export function App() {
   const [error, setError] = useState("");
   const [filters, setFilters] = useState<FilterState>(() => readFilters());
   const [tab, setTab] = useState<TabId>(() => readModule());
-  const [menu, setMenu] = useState(false);
+  const [sideOpen, setSideOpen] = useState(() => window.innerWidth > 860);
   const [filterOpen, setFilterOpen] = useState(true);
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -144,7 +144,7 @@ export function App() {
 
   function selectModule(next: TabId) {
     setTab(next);
-    setMenu(false);
+    if (window.innerWidth <= 860) setSideOpen(false);
   }
 
   function toggle(key: ListKey, value: string) {
@@ -172,8 +172,8 @@ export function App() {
   }
 
   return (
-    <div className="shell">
-      <aside className={menu ? "sidebar open" : "sidebar"}>
+    <div className={sideOpen ? "shell" : "shell collapsed"}>
+      <aside className={sideOpen ? "sidebar open" : "sidebar"}>
         <div className="brand">
           <p className="kicker">PEN · 2026</p>
           <strong>Enrollment Atlas</strong>
@@ -188,7 +188,9 @@ export function App() {
           ))}
         </nav>
       </aside>
-      {menu ? <button className="scrim" type="button" aria-label="Close menu" onClick={() => setMenu(false)} /> : null}
+      {sideOpen && window.innerWidth <= 860 ? (
+        <button className="scrim" type="button" aria-label="Close menu" onClick={() => setSideOpen(false)} />
+      ) : null}
 
       <main className="main">
         <header className="top">
@@ -201,8 +203,8 @@ export function App() {
             </p>
           </div>
           <div className="search">
-            <button type="button" className="ghost menu-btn" onClick={() => setMenu(true)}>
-              Modules
+            <button type="button" className="ghost" onClick={() => setSideOpen((value) => !value)}>
+              {sideOpen ? "Hide menu" : "Show menu"}
             </button>
             <input
               ref={searchRef}
