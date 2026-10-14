@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { fmt } from "../format";
-import { colorFor, facetCounts } from "../query";
-import type { Dim, Filters, ListKey, Student, TriFilter } from "../types";
+import { facetCounts } from "../query";
+import type { Filters, ListKey, Student, TriFilter } from "../types";
 
 const GROUPS: { title: string; open?: boolean; dims: { dim: ListKey; label: string }[] }[] = [
   {
@@ -44,8 +44,6 @@ const GROUPS: { title: string; open?: boolean; dims: { dim: ListKey; label: stri
   },
 ];
 
-const INLINE = new Set<ListKey>(["program", "system", "donor", "province", "gender", "stage"]);
-
 export function Filters({
   students,
   filters,
@@ -72,29 +70,17 @@ export function Filters({
       {GROUPS.map((group) => (
         <details key={group.title} open={group.open}>
           <summary>{group.title}</summary>
-          {group.dims.map((item) =>
-            INLINE.has(item.dim) ? (
-              <Checklist
-                key={item.dim}
-                label={item.label}
-                dim={item.dim}
-                students={students}
-                filters={filters}
-                onToggle={onToggle}
-                onSetList={onSetList}
-              />
-            ) : (
-              <Picker
-                key={item.dim}
-                label={item.label}
-                dim={item.dim}
-                students={students}
-                filters={filters}
-                onToggle={onToggle}
-                onSetList={onSetList}
-              />
-            ),
-          )}
+          {group.dims.map((item) => (
+            <Picker
+              key={item.dim}
+              label={item.label}
+              dim={item.dim}
+              students={students}
+              filters={filters}
+              onToggle={onToggle}
+              onSetList={onSetList}
+            />
+          ))}
         </details>
       ))}
 
@@ -169,44 +155,6 @@ export function Filters({
   );
 }
 
-function Checklist({
-  label,
-  dim,
-  students,
-  filters,
-  onToggle,
-  onSetList,
-}: {
-  label: string;
-  dim: ListKey;
-  students: Student[];
-  filters: Filters;
-  onToggle: (key: ListKey, value: string) => void;
-  onSetList: (key: ListKey, values: string[]) => void;
-}) {
-  const options = useMemo(() => facetCounts(students, filters, dim), [students, filters, dim]);
-  const selected = filters[dim];
-  return (
-    <fieldset className="checks">
-      <legend>{label}</legend>
-      <button type="button" className={selected.length ? "mini" : "mini on"} onClick={() => onSetList(dim, [])}>
-        All
-      </button>
-      {options.map((option, index) => {
-        const on = selected.includes(option.value);
-        return (
-          <label key={option.value} className={on ? "check on" : "check"}>
-            <input type="checkbox" checked={on} onChange={() => onToggle(dim, option.value)} />
-            <i style={{ background: colorFor(dim as Dim, option.value, index) }} />
-            <span>{option.value}</span>
-            <em>{fmt(option.count)}</em>
-          </label>
-        );
-      })}
-    </fieldset>
-  );
-}
-
 function Picker({
   label,
   dim,
@@ -242,7 +190,11 @@ function Picker({
     <div className="picker" ref={box}>
       <span>{label}</span>
       <button type="button" className="picker-btn" onClick={() => setOpen((value) => !value)}>
-        {selected.length ? `${selected.length} selected` : `All ${label.toLowerCase()}`}
+        {selected.length === 0
+          ? `All ${label.toLowerCase()}`
+          : selected.length <= 2
+            ? selected.join(", ")
+            : `${selected.length} selected`}
       </button>
       {open ? (
         <div className="popover">

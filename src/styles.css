@@ -36,9 +36,9 @@ h3 { font-size: 18px; }
   top: 0;
   height: 100vh;
   overflow: auto;
-  background: #fafafa;
-  color: #000000;
-  border-right: 1px solid #e4e4e4;
+  background: #0f5a3f; /* placeholder green: replace with the TCF brand green */
+  color: #ffffff;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
   padding: 16px 12px 24px;
 }
 .brand strong { display: block; font-family: var(--serif); font-size: 28px; margin: 4px 0; }
@@ -207,6 +207,7 @@ h3 { font-size: 18px; }
 .picker { position: relative; margin: 0 0 12px; display: grid; gap: 6px; }
 .picker > span, .flag > span, .range-top span { font-size: 12px; color: var(--muted); }
 .picker-btn { text-align: left; border-radius: 12px; border: 1px solid var(--line); background: var(--card); padding: 8px 10px; }
+.picker-btn { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .popover {
   position: absolute;
   z-index: 5;
@@ -323,23 +324,23 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
   .kpis, .insights, .quality-bars { grid-template-columns: 1fr; }
 }
 
-/* ---- Sidebar navigation ---- */
+/* ---- Sidebar navigation (green) ---- */
 .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 6px 8px 14px; }
-.sidebar-brand strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.2; }
-.sidebar-brand span:not(.logo) { display: block; font-size: 12px; color: #6b6b6b; }
+.sidebar-brand strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.2; color: #ffffff; }
+.sidebar-brand span:not(.logo) { display: block; font-size: 12px; color: #b9dccb; }
 .logo {
   display: inline-grid;
   place-items: center;
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: #000000;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0f5a3f;
   flex-shrink: 0;
 }
 .nav { display: grid; gap: 14px; }
 .nav-group { display: grid; gap: 2px; }
-.nav-label { margin: 0 8px 4px; font-size: 12px; color: #6b6b6b; font-weight: 500; }
+.nav-label { margin: 0 8px 4px; font-size: 12px; color: #b9dccb; font-weight: 500; }
 .nav-link {
   display: flex;
   align-items: center;
@@ -347,15 +348,15 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
   width: 100%;
   border: 0;
   background: transparent;
-  color: #000000;
+  color: #ffffff;
   border-radius: 6px;
   padding: 7px 8px;
   font-size: 14px;
   text-align: left;
 }
-.nav-link:hover { background: #ececec; }
-.nav-link.on { background: #e8e8e8; font-weight: 600; }
-.nav-link em { margin-left: auto; font-style: normal; font-size: 12px; color: #6b6b6b; }
+.nav-link:hover { background: rgba(255, 255, 255, 0.1); }
+.nav-link.on { background: rgba(255, 255, 255, 0.18); font-weight: 600; }
+.nav-link em { margin-left: auto; font-style: normal; font-size: 12px; color: #b9dccb; }
 
 /* ---- Content top bar (sidebar toggle + breadcrumb) ---- */
 .content-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
@@ -408,11 +409,11 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
 
 /* ---- Collapsible sidebar (desktop). Mobile uses the overlay rules above. ---- */
 @media (min-width: 861px) {
-  .shell.collapsed { grid-template-columns: 0 minmax(0, 1fr); }
+  .shell.collapsed { grid-template-columns: minmax(0, 1fr); }
   .shell.collapsed .sidebar { display: none; }
 }
 
-/* ---- Dark mode (page, sidebar, content bar) ---- */
+/* ---- Dark mode (content page and top bar; the sidebar stays green) ---- */
 .dark .main {
   --bg: #0a0a0b;
   --ink: #fafafa;
@@ -423,17 +424,8 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
   background: #0a0a0b;
   color: #fafafa;
 }
-.dark .sidebar { background: #0f0f11; color: #fafafa; border-color: #27272a; }
-.dark .sidebar-brand span:not(.logo),
-.dark .nav-label,
-.dark .nav-link em { color: #a1a1aa; }
-.dark .logo { background: #fafafa; color: #0a0a0b; }
-.dark .nav-link { color: #fafafa; }
-.dark .nav-link:hover { background: #1c1c1f; }
-.dark .nav-link.on { background: #27272a; }
 .dark .icon-btn { background: #121214; border-color: #27272a; color: #fafafa; }
 .dark .icon-btn:hover { background: #1c1c1f; }
 .dark .crumb { color: #a1a1aa; }
 .dark .crumb strong { color: #fafafa; }
-.dark .sidebar-actions { margin-top: 18px; border-top: 1px solid #27272a; padding-top: 12px; }
-.sidebar-actions { margin-top: 18px; border-top: 1px solid #e4e4e4; padding-top: 12px; }
+.sidebar-actions { margin-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.18); padding-top: 12px; }

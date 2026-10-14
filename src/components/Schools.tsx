@@ -74,6 +74,7 @@ export function Schools({
           columns={columns}
           data={visible}
           pageSize={25}
+          numeric={["students", "female", "disability", "missingBform"]}
           onRowClick={(group) => setSelected(group.key)}
           isSelected={(group) => group.key === selected}
           emptyText="No schools match this search."

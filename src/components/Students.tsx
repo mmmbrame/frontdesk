@@ -125,7 +125,7 @@ export function Students({ rows, query }: { rows: Student[]; query: string }) {
         </button>
       }
     >
-      <DataTable columns={columns} data={rows} pageSize={25} emptyText="No students match. Clear a filter or try fewer words." />
+      <DataTable columns={columns} data={rows} pageSize={25} numeric={["age", "admitted"]} emptyText="No students match. Clear a filter or try fewer words." />
     </Panel>
   );
 }
