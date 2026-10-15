@@ -313,7 +313,11 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
   .sidebar {
     position: fixed;
     z-index: 30;
-    width: min(380px, 92vw);
+    width: min(272px, 74vw);
+    height: auto;
+    max-height: 100dvh;
+    border-radius: 0 16px 16px 0;
+    box-shadow: 8px 0 28px rgba(0, 0, 0, 0.22);
     transform: translateX(-105%);
     transition: transform 0.2s ease;
   }
