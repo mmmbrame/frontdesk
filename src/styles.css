@@ -45,6 +45,7 @@ h3 { font-size: 18px; }
 .brand p { margin: 0 0 8px; color: var(--muted); font-size: 13px; }
 .main {
   min-width: 0;
+  overflow-x: clip; /* stop chart tooltips at the screen edge from widening the page */
   padding: 28px 32px 72px;
   /* Content page: white background, black text. */
   --bg: #ffffff;
