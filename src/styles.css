@@ -572,7 +572,8 @@ html.dark { background: #0a0a0b; color: #fafafa; }
 html.dark .gate-card { background: #121214; border-color: #27272a; color: #fafafa; }
 html.dark .gate-icon { background: #16352c; color: #7fd6b8; }
 @media (max-width: 720px) {
-  .gate-grid { grid-template-columns: 1fr; }
+  .gate-grid, .grid-2, .split-2, .controls { grid-template-columns: 1fr; }
+  .kpis, .insights, .quality-bars { grid-template-columns: 1fr; }
 }
 /* Keep wide tables inside their own scroll box instead of widening the page.
    Grid and flex children default to min-width:auto, which lets a table push
@@ -581,5 +582,4 @@ html.dark .gate-icon { background: #16352c; color: #7fd6b8; }
 .main .panel,
 .grid-2 > *,
 .split-2 > * { min-width: 0; }
-.grid-2 { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
 .table-scroll { width: 100%; max-width: 100%; }
