@@ -1,6 +1,6 @@
 import type { ServerResponse } from "node:http";
-import { checkCredentials, createSessionToken, sessionCookie } from "../../server/session";
-import { readJson, sendJson, type ApiRequest } from "../../server/http";
+import { checkCredentials, createSessionToken, sessionCookie } from "../../server/session.js";
+import { readJson, sendJson, type ApiRequest } from "../../server/http.js";
 
 export default async function handler(req: ApiRequest, res: ServerResponse) {
   if (req.method !== "POST") return sendJson(res, 405, { error: "Use POST." });

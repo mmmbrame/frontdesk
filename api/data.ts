@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { readSession } from "../server/session";
-import { sendJson } from "../server/http";
+import { readSession } from "../server/session.js";
+import { sendJson } from "../server/http.js";
 
 // The student file lives in private/ (not public/), so it is only reachable through this function.
 export default async function handler(req: IncomingMessage, res: ServerResponse) {

@@ -1,7 +1,10 @@
 {
   "functions": {
+    "api/**/*.ts": {
+      "includeFiles": "server/**"
+    },
     "api/data.ts": {
-      "includeFiles": "private/**"
+      "includeFiles": "{server,private}/**"
     }
   }
 }
