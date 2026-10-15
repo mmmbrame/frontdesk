@@ -1,12 +1,10 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import type { IncomingMessage, ServerResponse } from "node:http";
-import { readSession } from "../server/session.js";
+import type { ServerResponse } from "node:http";
 import { sendJson } from "../server/http.js";
 
-// The student file lives in private/ (not public/), so it is only reachable through this function.
-export default async function handler(req: IncomingMessage, res: ServerResponse) {
-  if (!readSession(req.headers.cookie)) return sendJson(res, 401, { error: "Sign in to view the atlas." });
+// The student file lives in private/ (not public/) and is served by this function.
+export default async function handler(_req: unknown, res: ServerResponse) {
   try {
     const file = await readFile(path.join(process.cwd(), "private", "data.json"));
     res.statusCode = 200;

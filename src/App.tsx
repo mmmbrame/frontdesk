@@ -4,7 +4,6 @@ import {
   Database,
   GitCompare,
   LayoutDashboard,
-  LogOut,
   Map as MapIcon,
   Moon,
   Sun,
@@ -23,8 +22,7 @@ import { Quality } from "./components/Quality";
 import { Schools } from "./components/Schools";
 import { Students } from "./components/Students";
 import { fmt } from "./format";
-import { loadDataset, UnauthorizedError } from "./model";
-import { Login } from "./components/Login";
+import { loadDataset } from "./model";
 import { activeChips, applyFilters, bounds, isFiltered, removeChip, summarize } from "./query";
 import {
   EMPTY_FILTERS,
@@ -124,7 +122,6 @@ function readModule(): TabId {
 export function App() {
   const [data, setData] = useState<Dataset | null>(null);
   const [error, setError] = useState("");
-  const [auth, setAuth] = useState<"checking" | "out" | "in">("checking");
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
   const [filters, setFilters] = useState<FilterState>(() => readFilters());
   const [tab, setTab] = useState<TabId>(() => readModule());
@@ -133,24 +130,12 @@ export function App() {
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetch("/api/auth/session", { credentials: "same-origin" })
-      .then((response) => response.json() as Promise<{ authenticated: boolean }>)
-      .then((body) => setAuth(body.authenticated ? "in" : "out"))
-      .catch(() => setAuth("out"));
-  }, []);
-
-  useEffect(() => {
-    if (auth !== "in") return;
     loadDataset()
       .then(setData)
       .catch((reason: unknown) => {
-        if (reason instanceof UnauthorizedError) {
-          setAuth("out");
-          return;
-        }
         setError(reason instanceof Error ? reason.message : "The atlas could not be opened.");
       });
-  }, [auth]);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -160,12 +145,6 @@ export function App() {
       // Storage can be blocked; the theme still works for this visit.
     }
   }, [dark]);
-
-  async function signOut() {
-    await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
-    setData(null);
-    setAuth("out");
-  }
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -208,20 +187,6 @@ export function App() {
 
   function toggle(key: ListKey, value: string) {
     setFilters((current) => pickDim(current, key, value));
-  }
-
-  if (auth === "checking") {
-    return (
-      <main className="boot">
-        <p className="kicker">PEN · Academic year 2026</p>
-        <h1>Enrollment Atlas</h1>
-        <p>Checking your session…</p>
-      </main>
-    );
-  }
-
-  if (auth === "out") {
-    return <Login onSignedIn={() => setAuth("in")} />;
   }
 
   if (error) {
@@ -290,10 +255,6 @@ export function App() {
           >
             {dark ? <Sun size={16} /> : <Moon size={16} />}
             <span>{dark ? "Light mode" : "Dark mode"}</span>
-          </button>
-          <button type="button" className="nav-link" data-label="Sign out" aria-label="Sign out" onClick={signOut}>
-            <LogOut size={16} />
-            <span>Sign out</span>
           </button>
         </div>
       </aside>
