@@ -3,6 +3,9 @@
     "api/data.ts": {
       "includeFiles": "{server,private}/**"
     },
+    "api/staff.ts": {
+      "includeFiles": "private/**"
+    },
     "api/auth/*.ts": {
       "includeFiles": "server/**"
     }

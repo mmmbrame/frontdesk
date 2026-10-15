@@ -521,3 +521,55 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
 .recharts-cartesian-axis-tick-value { fill: var(--chart-axis); }
 .recharts-cartesian-grid line { stroke: var(--chart-grid); }
 .recharts-tooltip-cursor { fill: var(--chart-cursor); }
+
+/* Record chooser */
+.gate {
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  padding: 48px clamp(24px, 6vw, 96px);
+  max-width: 1080px;
+}
+.gate h1 { max-width: 14ch; margin: 8px 0 12px; }
+.gate-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: min(880px, 100%);
+  margin-top: 28px;
+}
+.gate-card {
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px 22px 20px;
+  box-shadow: var(--shadow);
+  color: inherit;
+}
+.gate-card:hover { border-color: var(--teal); }
+.gate-card strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 32px;
+  letter-spacing: -0.03em;
+  margin: 6px 0 8px;
+}
+.gate-card p { margin: 0; color: var(--muted); line-height: 1.45; }
+.gate-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #e7f4ee;
+  color: var(--teal);
+  margin-bottom: 14px;
+}
+html.dark { background: #0a0a0b; color: #fafafa; }
+html.dark .gate-card { background: #121214; border-color: #27272a; color: #fafafa; }
+html.dark .gate-icon { background: #16352c; color: #7fd6b8; }
+@media (max-width: 720px) {
+  .gate-grid { grid-template-columns: 1fr; }
+}

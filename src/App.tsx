@@ -7,6 +7,7 @@ import {
   Map as MapIcon,
   Moon,
   Sun,
+  LayoutGrid,
   PanelLeft,
   School,
   ShieldCheck,
@@ -119,7 +120,7 @@ function readModule(): TabId {
   return TABS.some((item) => item.id === requested) ? (requested as TabId) : "overview";
 }
 
-export function App() {
+export function App({ onHome }: { onHome?: () => void }) {
   const [data, setData] = useState<Dataset | null>(null);
   const [error, setError] = useState("");
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
@@ -246,6 +247,12 @@ export function App() {
           ))}
         </nav>
         <div className="nav-group sidebar-actions">
+          {onHome ? (
+            <button type="button" className="nav-link" data-label="Choose records" aria-label="Choose records" onClick={onHome}>
+              <LayoutGrid size={16} />
+              <span>Choose records</span>
+            </button>
+          ) : null}
           <button
             type="button"
             className="nav-link"

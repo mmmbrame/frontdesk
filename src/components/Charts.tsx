@@ -78,10 +78,12 @@ export function Donut({
   data,
   total,
   onPick,
+  center = "students",
 }: {
   data: { name: string; value: number; fill: string }[];
   total: number;
   onPick?: (name: string) => void;
+  center?: string;
 }) {
   return (
     <div className="donut-wrap">
@@ -106,7 +108,7 @@ export function Donut({
       </ResponsiveContainer>
       <div className="donut-center">
         <strong>{fmt(total)}</strong>
-        <span>students</span>
+        <span>{center}</span>
       </div>
     </div>
   );
