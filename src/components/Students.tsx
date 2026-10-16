@@ -1,11 +1,24 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { countLabel, downloadCsv, escapeRegExp } from "../format";
 import type { Student } from "../types";
+import { AddStudent } from "./AddStudent";
 import { DataTable } from "./ui/data-table";
 import { Panel } from "./Visuals";
 
-export function Students({ rows, query }: { rows: Student[]; query: string }) {
+export function Students({
+  rows,
+  query,
+  catalog,
+  onCreated,
+}: {
+  rows: Student[];
+  query: string;
+  catalog: Student[];
+  onCreated: (student: Student) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [notice, setNotice] = useState("");
   const tokens = useMemo(
     () => query.toLowerCase().split(/\s+/).filter((token) => token.length > 1),
     [query],
@@ -120,12 +133,28 @@ export function Students({ rows, query }: { rows: Student[]; query: string }) {
       title={countLabel(rows.length, "student")}
       hint="Click a column header to sort. Search from the top bar matches name, father, B-Form, EMIS, school, and place together."
       action={
-        <button type="button" className="solid" onClick={exportCsv}>
-          Export this view
-        </button>
+        <div className="row-actions">
+          <button type="button" className="solid" onClick={() => setOpen(true)}>
+            Add student
+          </button>
+          <button type="button" className="ghost" onClick={exportCsv}>
+            Export this view
+          </button>
+        </div>
       }
     >
+      {notice ? <p className="notice">{notice}</p> : null}
       <DataTable columns={columns} data={rows} pageSize={25} numeric={["age", "admitted"]} emptyText="No students match. Clear a filter or try fewer words." />
+      {open ? (
+        <AddStudent
+          catalog={catalog}
+          onClose={() => setOpen(false)}
+          onCreated={(student) => {
+            onCreated(student);
+            setNotice(`${student.name} was added to the atlas. Clear a filter if this view is hiding them.`);
+          }}
+        />
+      ) : null}
     </Panel>
   );
 }

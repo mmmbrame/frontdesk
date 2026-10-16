@@ -335,7 +335,14 @@ export function StaffApp({ onHome }: { onHome: () => void }) {
             }}
           />
         ) : null}
-        {tab === "people" ? <People rows={filtered} query={filters.q} /> : null}
+        {tab === "people" ? (
+          <People
+            rows={filtered}
+            query={filters.q}
+            catalog={data.staff}
+            onCreated={(person) => setData((current) => (current ? { ...current, staff: [person, ...current.staff] } : current))}
+          />
+        ) : null}
         {tab === "compare" ? (
           <Compare rows={filtered} onPick={(dim, value) => setFilters((current) => pickDim(current, dim, value))} />
         ) : null}

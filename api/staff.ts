@@ -1,9 +1,20 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { ServerResponse } from "node:http";
-import { sendJson } from "../server/http.js";
+import { addStaff } from "../server/additions.js";
+import { readJson, sendJson, type ApiRequest } from "../server/http.js";
 
-export default async function handler(_req: unknown, res: ServerResponse) {
+export default async function handler(req: ApiRequest, res: ServerResponse) {
+  if (req.method === "POST") {
+    try {
+      const person = await addStaff(await readJson(req));
+      return sendJson(res, 201, { person });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "The staff member could not be added.";
+      const status = message.startsWith("Enter") || message.startsWith("The staff list") ? 400 : 500;
+      return sendJson(res, status, { error: message });
+    }
+  }
   try {
     const file = await readFile(path.join(process.cwd(), "private", "staff.json"));
     res.statusCode = 200;

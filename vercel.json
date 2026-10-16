@@ -4,7 +4,13 @@
       "includeFiles": "{server,private}/**"
     },
     "api/staff.ts": {
-      "includeFiles": "private/**"
+      "includeFiles": "{server,private}/**"
+    },
+    "api/students.ts": {
+      "includeFiles": "server/**"
+    },
+    "api/additions.ts": {
+      "includeFiles": "server/**"
     },
     "api/auth/*.ts": {
       "includeFiles": "server/**"

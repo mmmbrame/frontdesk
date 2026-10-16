@@ -12,8 +12,19 @@ function tri(value: string): Tri {
   return "Unknown";
 }
 
+async function loadAddedStudents(): Promise<Student[]> {
+  try {
+    const response = await fetch("/api/additions");
+    if (!response.ok) return [];
+    const data = (await response.json()) as { students?: Student[] };
+    return Array.isArray(data.students) ? data.students.filter((student) => student && typeof student.name === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function loadDataset(): Promise<Dataset> {
-  const response = await fetch("/api/data");
+  const [response, added] = await Promise.all([fetch("/api/data"), loadAddedStudents()]);
   if (!response.ok) throw new Error("The student file could not be loaded.");
   const raw = (await response.json()) as Raw;
   const dict = (field: string, index: number) => raw.dicts[field]?.[index] ?? "Unknown";
@@ -70,5 +81,5 @@ export async function loadDataset(): Promise<Dataset> {
       .toLowerCase();
     return student;
   });
-  return { meta: raw.meta, students };
+  return { meta: raw.meta, students: [...added, ...students] };
 }

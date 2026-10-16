@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { countLabel, downloadCsv, escapeRegExp, fmt, pct } from "../format";
 import { Donut, HBars, Legend } from "../components/Charts";
+import { AddStaff } from "./AddStaff";
 import { DataTable } from "../components/ui/data-table";
 import { Panel, Ribbon } from "../components/Visuals";
 import {
@@ -342,7 +343,19 @@ export function Schools({
   );
 }
 
-export function People({ rows, query }: { rows: Staff[]; query: string }) {
+export function People({
+  rows,
+  query,
+  catalog,
+  onCreated,
+}: {
+  rows: Staff[];
+  query: string;
+  catalog: Staff[];
+  onCreated: (person: Staff) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [notice, setNotice] = useState("");
   const tokens = useMemo(() => query.toLowerCase().split(/\s+/).filter((token) => token.length > 1), [query]);
   const columns = useMemo<ColumnDef<Staff, unknown>[]>(
     () => [
@@ -435,12 +448,28 @@ export function People({ rows, query }: { rows: Staff[]; query: string }) {
       title={countLabel(rows.length, "person", "people")}
       hint="Search from the top bar matches name, father, CNIC, contact, EMIS, school, and place together."
       action={
-        <button type="button" className="solid" onClick={exportCsv}>
-          Export this view
-        </button>
+        <div className="row-actions">
+          <button type="button" className="solid" onClick={() => setOpen(true)}>
+            Add staff
+          </button>
+          <button type="button" className="ghost" onClick={exportCsv}>
+            Export this view
+          </button>
+        </div>
       }
     >
+      {notice ? <p className="notice">{notice}</p> : null}
       <DataTable columns={columns} data={rows} pageSize={25} emptyText="No staff match. Clear a filter or try fewer words." />
+      {open ? (
+        <AddStaff
+          catalog={catalog}
+          onClose={() => setOpen(false)}
+          onCreated={(person) => {
+            onCreated(person);
+            setNotice(`${person.name} was added to the atlas. Clear a filter if this view is hiding them.`);
+          }}
+        />
+      ) : null}
     </Panel>
   );
 }

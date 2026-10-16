@@ -390,7 +390,16 @@ export function App({ onHome }: { onHome?: () => void }) {
             }}
           />
         ) : null}
-        {tab === "students" ? <Students rows={filtered} query={filters.q} /> : null}
+        {tab === "students" ? (
+          <Students
+            rows={filtered}
+            query={filters.q}
+            catalog={data.students}
+            onCreated={(student) =>
+              setData((current) => (current ? { ...current, students: [student, ...current.students] } : current))
+            }
+          />
+        ) : null}
         {tab === "compare" ? (
           <Compare rows={filtered} onPick={(dim, value) => setFilters((current) => pickDim(current, dim, value))} />
         ) : null}
