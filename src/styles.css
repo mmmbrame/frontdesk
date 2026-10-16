@@ -379,37 +379,53 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
 .crumb strong { color: #000000; font-weight: 500; }
 
 /* ---- Filter panel (content area, above every module) ---- */
-.filter-panel {
-  margin-top: 22px;
+/* Filter bar: one compact row above the register. */
+.filter-bar { display: flex; align-items: center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+
+/* Filter drawer: opens from the right, leaves the table visible underneath. */
+.filter-scrim { position: fixed; inset: 0; border: 0; background: rgba(28, 23, 18, 0.35); z-index: 26; cursor: default; }
+.filter-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 27;
+  width: min(420px, 100vw);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 14px 18px 12px;
-  box-shadow: var(--shadow);
+  color: var(--ink);
+  border-left: 1px solid var(--line);
+  box-shadow: -8px 0 28px rgba(0, 0, 0, 0.18);
 }
-.filter-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.filter-panel-head strong { display: block; font-family: var(--serif); font-size: 22px; line-height: 1.1; }
-.filter-panel-head .fine { margin: 2px 0 0; }
-.filter-panel .filters {
+.filter-drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.filter-drawer-head strong { font-family: var(--serif); font-size: 22px; line-height: 1.1; }
+.filter-drawer-body { flex: 1; overflow-y: auto; padding: 12px 18px 24px; }
+.filter-drawer .filters {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 0 24px;
-  margin-top: 8px;
+  grid-template-columns: 1fr;
+  gap: 0;
 }
-.filter-panel .filters details { padding: 8px 0; }
-.filter-panel .checks { max-height: 220px; overflow: auto; padding-right: 4px; }
-.filter-panel .sidebar-foot {
+.filter-drawer .filters details { padding: 8px 0; }
+.filter-drawer .checks { max-height: 260px; overflow: auto; padding-right: 4px; }
+.filter-drawer .sidebar-foot {
   position: static;
   background: none;
   grid-column: 1 / -1;
   grid-auto-flow: column;
   justify-content: space-between;
   align-items: center;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
+  padding: 12px 0 0;
 }
-.filter-panel .sidebar-foot .clear { width: auto; }
-.filter-panel .sidebar-foot span { text-align: right; }
+.filter-drawer .sidebar-foot .clear { width: auto; }
+.filter-drawer .sidebar-foot span { text-align: right; }
 
 /* ---- Collapsible sidebar (desktop): collapses to an icon rail with hover labels. ---- */
 .shell { transition: grid-template-columns 0.2s ease; }

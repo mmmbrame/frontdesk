@@ -95,7 +95,7 @@ export function StaffApp({ onHome }: { onHome: () => void }) {
   const [filters, setFilters] = useState<Filters>(() => readFilters());
   const [tab, setTab] = useState<TabId>(() => readModule());
   const [sideOpen, setSideOpen] = useState(() => window.innerWidth > 860);
-  const [filterOpen, setFilterOpen] = useState(true);
+  const [filterOpen, setFilterOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -270,32 +270,37 @@ export function StaffApp({ onHome }: { onHome: () => void }) {
           </div>
         </header>
 
-        <section className="filter-panel" aria-label="Filters">
-          <div className="filter-panel-head">
-            <div>
-              <strong>Filters</strong>
-              <span className="fine">
-                {isFiltered(filters)
-                  ? `${chips.length} active. Clear a value to widen the results.`
-                  : "Tick a value, or leave it clear to keep everyone."}
-              </span>
-            </div>
-            <button type="button" className="ghost" onClick={() => setFilterOpen((value) => !value)}>
-              {filterOpen ? "Hide filters" : "Show filters"}
-            </button>
-          </div>
-          {filterOpen ? (
-            <StaffFilters
-              staff={data.staff}
-              filters={filters}
-              filteredCount={filtered.length}
-              onToggle={toggle}
-              onSetList={(key, values) => setFilters((current) => ({ ...current, [key]: values }))}
-              onPresence={(key, value: Presence) => setFilters((current) => ({ ...current, [key]: value }))}
-              onReset={() => setFilters(EMPTY_FILTERS)}
-            />
-          ) : null}
-        </section>
+        <div className="filter-bar">
+          <button type="button" className="ghost" aria-expanded={filterOpen} onClick={() => setFilterOpen(true)}>
+            Filters{isFiltered(filters) ? ` · ${chips.length} active` : ""}
+          </button>
+          <span className="fine">
+            {isFiltered(filters) ? "Clear a value in the drawer to widen the results." : "Showing everyone. Open filters to narrow the list."}
+          </span>
+        </div>
+
+        {filterOpen ? (
+          <>
+            <button type="button" className="filter-scrim" aria-label="Close filters" onClick={() => setFilterOpen(false)} />
+            <aside className="filter-drawer" aria-label="Filters">
+              <div className="filter-drawer-head">
+                <strong>Filters</strong>
+                <button type="button" className="ghost" onClick={() => setFilterOpen(false)}>Done</button>
+              </div>
+              <div className="filter-drawer-body">
+  <StaffFilters
+                staff={data.staff}
+                filters={filters}
+                filteredCount={filtered.length}
+                onToggle={toggle}
+                onSetList={(key, values) => setFilters((current) => ({ ...current, [key]: values }))}
+                onPresence={(key, value: Presence) => setFilters((current) => ({ ...current, [key]: value }))}
+                onReset={() => setFilters(EMPTY_FILTERS)}
+              />
+              </div>
+            </aside>
+          </>
+        ) : null}
 
         <div className="status">
           <strong>
