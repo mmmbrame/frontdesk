@@ -381,8 +381,7 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
 /* ---- Filter panel (content area, above every module) ---- */
 /* Filter bar: one compact row above the register. */
 .filter-bar { display: flex; align-items: center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
-.filter-bar .fine { order: 1; }
-.filter-bar > button { order: 2; margin-left: auto; } /* Filters button sits at the top-right */
+.top-tools { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
 
 /* Filter drawer: opens from the right, leaves the table visible underneath. */
 .filter-scrim { position: fixed; inset: 0; border: 0; background: rgba(28, 23, 18, 0.35); z-index: 26; cursor: default; }

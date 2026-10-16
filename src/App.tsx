@@ -293,22 +293,24 @@ export function App({ onHome }: { onHome?: () => void }) {
               sheets were already inside the combined Punjab extract, so they are not counted twice.
             </p>
           </div>
-          <div className="search">
-            <input
-              ref={searchRef}
-              value={filters.q}
-              onChange={(event) => setFilters((current) => ({ ...current, q: event.target.value }))}
-              placeholder="Search name, father, B-Form, EMIS, school, place"
-              aria-label="Search students"
-            />
-            <span className="slash">/</span>
+          <div className="top-tools">
+            <div className="search">
+              <input
+                ref={searchRef}
+                value={filters.q}
+                onChange={(event) => setFilters((current) => ({ ...current, q: event.target.value }))}
+                placeholder="Search name, father, B-Form, EMIS, school, place"
+                aria-label="Search students"
+              />
+              <span className="slash">/</span>
+            </div>
+            <button type="button" className="ghost" aria-expanded={filterOpen} onClick={() => setFilterOpen(true)}>
+              Filters{isFiltered(filters, edge) ? ` · ${chips.length} active` : ""}
+            </button>
           </div>
         </header>
 
         <div className="filter-bar">
-          <button type="button" className="ghost" aria-expanded={filterOpen} onClick={() => setFilterOpen(true)}>
-            Filters{isFiltered(filters, edge) ? ` · ${chips.length} active` : ""}
-          </button>
           <span className="fine">
             {isFiltered(filters, edge) ? "Clear a value in the drawer to widen the results." : "Showing everyone. Open filters to narrow the list."}
           </span>

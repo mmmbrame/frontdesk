@@ -258,22 +258,24 @@ export function StaffApp({ onHome }: { onHome: () => void }) {
               list, so nobody is dropped as a duplicate extract.
             </p>
           </div>
-          <div className="search">
-            <input
-              ref={searchRef}
-              value={filters.q}
-              onChange={(event) => setFilters((current) => ({ ...current, q: event.target.value }))}
-              placeholder="Search name, father, CNIC, contact, EMIS, school, place"
-              aria-label="Search staff"
-            />
-            <span className="slash">/</span>
+          <div className="top-tools">
+            <div className="search">
+              <input
+                ref={searchRef}
+                value={filters.q}
+                onChange={(event) => setFilters((current) => ({ ...current, q: event.target.value }))}
+                placeholder="Search name, father, CNIC, contact, EMIS, school, place"
+                aria-label="Search staff"
+              />
+              <span className="slash">/</span>
+            </div>
+            <button type="button" className="ghost" aria-expanded={filterOpen} onClick={() => setFilterOpen(true)}>
+              Filters{isFiltered(filters) ? ` · ${chips.length} active` : ""}
+            </button>
           </div>
         </header>
 
         <div className="filter-bar">
-          <button type="button" className="ghost" aria-expanded={filterOpen} onClick={() => setFilterOpen(true)}>
-            Filters{isFiltered(filters) ? ` · ${chips.length} active` : ""}
-          </button>
           <span className="fine">
             {isFiltered(filters) ? "Clear a value in the drawer to widen the results." : "Showing everyone. Open filters to narrow the list."}
           </span>
