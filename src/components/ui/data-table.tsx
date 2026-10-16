@@ -55,7 +55,7 @@ export function DataTable<T>({
 
   return (
     <div className="space-y-3">
-      <div className="relative max-h-[68vh] overflow-auto rounded-md border border-border bg-card">
+      <div className="relative overflow-x-auto rounded-md border border-border bg-card">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-card shadow-[inset_0_-1px_0_var(--color-border)]">
             {table.getHeaderGroups().map((group) => (
