@@ -3,14 +3,15 @@ import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
 import { App } from "./App";
 import { Home } from "./Home";
+import { PartnerApp } from "./partner/PartnerApp";
 import { StaffApp } from "./staff/StaffApp";
 import "./index.css";
 
-type Audience = "students" | "staff" | null;
+type Audience = "students" | "staff" | "partners" | null;
 
 function readAudience(): Audience {
   const value = new URLSearchParams(location.search).get("a");
-  return value === "students" || value === "staff" ? value : null;
+  return value === "students" || value === "staff" || value === "partners" ? value : null;
 }
 
 function Root() {
@@ -22,7 +23,7 @@ function Root() {
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
-  function choose(next: "students" | "staff") {
+  function choose(next: "students" | "staff" | "partners") {
     const params = new URLSearchParams();
     params.set("a", next);
     params.set("m", "overview");
@@ -36,6 +37,7 @@ function Root() {
   }
 
   if (audience === "staff") return <StaffApp onHome={home} />;
+  if (audience === "partners") return <PartnerApp onHome={home} />;
   if (audience === "students") return <App onHome={home} />;
   return <Home onChoose={choose} />;
 }

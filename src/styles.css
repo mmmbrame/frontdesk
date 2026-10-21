@@ -118,7 +118,7 @@ h3 { font-size: 18px; }
 
 .stack { display: grid; gap: 16px; }
 .grid-2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
-.panel, .kpi, .insights article, .report-angles article, .quality-hero, .quality-bars article, .profile {
+.panel, .kpi, .insights article, .report-angles article, .runners article, .quality-hero, .quality-bars article, .profile {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 22px;
@@ -340,8 +340,25 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
   .grid-2, .controls, .split-2 { grid-template-columns: 1fr; }
   .top { flex-direction: column; align-items: stretch; }
 }
+.runners { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.runners article { padding: 16px; }
+.runners h3 { margin: 4px 0 8px; font-size: 16px; }
+.runners p { margin: 0; color: #4e463f; font-size: 13px; line-height: 1.4; }
+.strength {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+.strength summary { cursor: pointer; padding: 16px 18px; font-weight: 600; }
+.strength-body { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; padding: 0 18px 18px; }
+.strength-body h3 { margin: 0 0 6px; font-size: 16px; }
+.strength-body p { margin: 0; color: var(--muted); line-height: 1.45; }
+.dark .runners p { color: #d4d4d8; }
+
 @media (max-width: 860px) {
   .shell { grid-template-columns: 1fr; }
+  .gate-grid, .strength-body { grid-template-columns: 1fr; }
   .sidebar {
     position: fixed;
     z-index: 30;
@@ -584,14 +601,14 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
   align-content: center;
   justify-items: start;
   padding: 48px clamp(24px, 6vw, 96px);
-  max-width: 1080px;
+  max-width: 1240px;
 }
-.gate h1 { max-width: 14ch; margin: 8px 0 12px; }
+.gate h1 { max-width: 16ch; margin: 8px 0 12px; }
 .gate-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
-  width: min(880px, 100%);
+  width: min(1120px, 100%);
   margin-top: 28px;
 }
 .gate-card {
