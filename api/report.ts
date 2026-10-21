@@ -56,14 +56,23 @@ export default async function handler(req: ApiRequest, res: ServerResponse) {
       const { output } = await generateText({
         model,
         maxRetries: 0,
-        timeout: 12_000,
+        timeout: 15_000,
+        reasoning: "none",
         output: Output.object({
           name: "AtlasReport",
           description: "A short briefing that uses only the supplied figures.",
           schema: reportSchema,
         }),
         system: instructions,
-        prompt: `Audience: ${brief.audience}\nRequest: ${request}\n\nBrief:\n${JSON.stringify(brief)}`,
+        prompt: [
+          `Audience: ${brief.audience}`,
+          `Request: ${request}`,
+          "Return every key: title, lede, sections, caveats.",
+          'sections is an array of 2 or 3 objects, each with heading, finding, and why.',
+          'caveats is an array of 1 short string.',
+          "Brief:",
+          JSON.stringify(brief),
+        ].join("\n"),
       });
       if (output) return sendJson(res, 200, { report: output });
     } catch (error) {
