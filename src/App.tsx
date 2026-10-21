@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Compass,
   Database,
+  FileSpreadsheet,
   GitCompare,
   LayoutDashboard,
   Map as MapIcon,
@@ -23,6 +24,7 @@ import { Overview } from "./components/Overview";
 import { Quality } from "./components/Quality";
 import { StudentReport } from "./components/ReportView";
 import { Schools } from "./components/Schools";
+import { StudentWorkbook } from "./components/Workbook";
 import { Students } from "./components/Students";
 import { fmt } from "./format";
 import { loadDataset } from "./model";
@@ -54,6 +56,7 @@ const NAV: { label: string; items: { id: TabId; label: string; icon: LucideIcon 
     items: [
       { id: "schools", label: "Schools", icon: School },
       { id: "students", label: "Students", icon: Users },
+      { id: "sheets", label: "Sheets", icon: FileSpreadsheet },
     ],
   },
   { label: "Data", items: [{ id: "quality", label: "Quality", icon: ShieldCheck }] },
@@ -415,6 +418,7 @@ export function App({ onHome }: { onHome?: () => void }) {
         ) : null}
         {tab === "quality" ? <Quality meta={data.meta} rows={filtered} summary={summary} /> : null}
         {tab === "report" ? <StudentReport rows={filtered} universe={data.students.length} chips={chips} /> : null}
+        {tab === "sheets" ? <StudentWorkbook rows={data.students} fileName={data.meta.generatedFrom} /> : null}
       </main>
     </div>
   );

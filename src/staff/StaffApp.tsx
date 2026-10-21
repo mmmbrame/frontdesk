@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Compass,
   Database,
+  FileSpreadsheet,
   GitCompare,
   LayoutDashboard,
   LayoutGrid,
@@ -30,6 +31,7 @@ import {
   type TabId,
 } from "./types";
 import { StaffReport } from "../components/ReportView";
+import { StaffWorkbook } from "../components/Workbook";
 import { Compare, Explore, Geography, Overview, People, Quality, Schools } from "./views";
 
 const NAV: { label: string; items: { id: TabId; label: string; icon: LucideIcon }[] }[] = [
@@ -48,6 +50,7 @@ const NAV: { label: string; items: { id: TabId; label: string; icon: LucideIcon 
     items: [
       { id: "schools", label: "Schools", icon: School },
       { id: "people", label: "Staff", icon: Users },
+      { id: "sheets", label: "Sheets", icon: FileSpreadsheet },
     ],
   },
   { label: "Data", items: [{ id: "quality", label: "Quality", icon: ShieldCheck }] },
@@ -358,6 +361,7 @@ export function StaffApp({ onHome }: { onHome: () => void }) {
         ) : null}
         {tab === "quality" ? <Quality meta={data.meta} rows={filtered} /> : null}
         {tab === "report" ? <StaffReport rows={filtered} universe={data.staff.length} chips={chips} /> : null}
+        {tab === "sheets" ? <StaffWorkbook rows={data.staff} fileName={data.meta.generatedFrom} /> : null}
       </main>
     </div>
   );
