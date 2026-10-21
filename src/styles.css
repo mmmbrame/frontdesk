@@ -118,7 +118,7 @@ h3 { font-size: 18px; }
 
 .stack { display: grid; gap: 16px; }
 .grid-2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
-.panel, .kpi, .insights article, .quality-hero, .quality-bars article, .profile {
+.panel, .kpi, .insights article, .report-angles article, .quality-hero, .quality-bars article, .profile {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 22px;
@@ -135,6 +135,39 @@ h3 { font-size: 18px; }
 .insights article { padding: 16px; }
 .insights h3 { margin: 4px 0 8px; font-size: 20px; }
 .insights p { margin: 0; color: #4e463f; font-size: 14px; line-height: 1.45; }
+.chips button.on { background: var(--ink); color: #f7f1e6; border-color: var(--ink); }
+.report-label { display: grid; gap: 8px; font-weight: 600; }
+.report-label span { font-size: 14px; }
+.report-ask { display: grid; gap: 12px; }
+.report-ask textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: inherit;
+  border-radius: 16px;
+  padding: 12px 14px;
+  font: inherit;
+  line-height: 1.45;
+}
+.report-ask textarea:focus { outline: none; border-color: var(--teal); }
+.report-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.report-actions .fine { margin: 0; }
+.solid:disabled { opacity: 0.55; cursor: default; }
+.report-angles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.report-angles article { padding: 16px; }
+.report-angles article.wide { grid-column: 1 / -1; }
+.report-angles h3 { margin: 4px 0 8px; font-size: 18px; }
+.report-angles p { margin: 0; color: #4e463f; font-size: 14px; line-height: 1.45; }
+.report-sections { display: grid; gap: 14px; margin-top: 16px; }
+.report-sections h3 { margin: 0 0 6px; font-size: 18px; }
+.report-sections p { margin: 0; line-height: 1.5; }
+.report-sections .fine { margin-top: 6px; }
+.report-caveats { margin: 14px 0 0; padding-left: 18px; color: var(--muted); }
+.report-caveats li { margin: 4px 0; }
+table.data.plain tbody tr { cursor: default; }
+table.data.plain tbody tr:hover { background: transparent; }
 
 .ribbon { display: flex; height: 46px; border-radius: 14px; overflow: hidden; margin-bottom: 12px; }
 .ribbon button { border: 0; color: #f7f3ec; font-size: 12px; font-weight: 600; min-width: 0; padding: 0 8px; }
@@ -303,7 +336,7 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
 .scrim { display: none; }
 
 @media (max-width: 1100px) {
-  .kpis, .insights, .quality-bars { grid-template-columns: 1fr 1fr; }
+  .kpis, .insights, .quality-bars, .report-angles { grid-template-columns: 1fr 1fr; }
   .grid-2, .controls, .split-2 { grid-template-columns: 1fr; }
   .top { flex-direction: column; align-items: stretch; }
 }
@@ -325,7 +358,7 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
   .menu-btn { display: inline-flex; }
   .slash { display: none; }
   .main { padding: 18px 14px 48px; }
-  .kpis, .insights, .quality-bars { grid-template-columns: 1fr; }
+  .kpis, .insights, .quality-bars, .report-angles { grid-template-columns: 1fr; }
 }
 
 /* ---- Sidebar navigation (green) ---- */
@@ -525,7 +558,8 @@ mark { background: #f3d48a; color: inherit; border-radius: 3px; padding: 0 2px; 
 .dark .grade-bars i,
 .dark .quality-bars i { background: #27272a; }
 .dark mark { background: #5c4a1a; color: #fff7e0; }
-.dark .insights p { color: #d4d4d8; }
+.dark .insights p, .dark .report-angles p { color: #d4d4d8; }
+.dark table.data.plain tbody tr:hover { background: transparent; }
 
 /* Heat map cell text */
 .heat-cell { color: var(--heat-ink); }
@@ -593,7 +627,7 @@ html.dark .gate-card { background: #121214; border-color: #27272a; color: #fafaf
 html.dark .gate-icon { background: #16352c; color: #7fd6b8; }
 @media (max-width: 720px) {
   .gate-grid, .grid-2, .split-2, .controls { grid-template-columns: 1fr; }
-  .kpis, .insights, .quality-bars { grid-template-columns: 1fr; }
+  .kpis, .insights, .quality-bars, .report-angles { grid-template-columns: 1fr; }
 }
 /* Keep wide tables inside their own scroll box instead of widening the page.
    Grid and flex children default to min-width:auto, which lets a table push

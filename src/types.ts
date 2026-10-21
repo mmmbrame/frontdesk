@@ -179,7 +179,8 @@ export type TabId =
   | "schools"
   | "students"
   | "compare"
-  | "quality";
+  | "quality"
+  | "report";
 
 export const GRADE_ORDER = [
   "Nursery",

@@ -11,6 +11,7 @@ import {
   PanelLeft,
   School,
   ShieldCheck,
+  Sparkles,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -20,6 +21,7 @@ import { Filters } from "./components/Filters";
 import { Geography } from "./components/Geography";
 import { Overview } from "./components/Overview";
 import { Quality } from "./components/Quality";
+import { StudentReport } from "./components/ReportView";
 import { Schools } from "./components/Schools";
 import { Students } from "./components/Students";
 import { fmt } from "./format";
@@ -44,6 +46,7 @@ const NAV: { label: string; items: { id: TabId; label: string; icon: LucideIcon 
       { id: "explore", label: "Explore", icon: Compass },
       { id: "geography", label: "Geography", icon: MapIcon },
       { id: "compare", label: "Compare", icon: GitCompare },
+      { id: "report", label: "Report", icon: Sparkles },
     ],
   },
   {
@@ -411,6 +414,7 @@ export function App({ onHome }: { onHome?: () => void }) {
           <Compare rows={filtered} onPick={(dim, value) => setFilters((current) => pickDim(current, dim, value))} />
         ) : null}
         {tab === "quality" ? <Quality meta={data.meta} rows={filtered} summary={summary} /> : null}
+        {tab === "report" ? <StudentReport rows={filtered} universe={data.students.length} chips={chips} /> : null}
       </main>
     </div>
   );

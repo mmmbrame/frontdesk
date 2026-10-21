@@ -14,6 +14,9 @@
     },
     "api/auth/*.ts": {
       "includeFiles": "server/**"
+    },
+    "api/report.ts": {
+      "maxDuration": 30
     }
   }
 }

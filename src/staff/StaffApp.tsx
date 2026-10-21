@@ -10,6 +10,7 @@ import {
   PanelLeft,
   School,
   ShieldCheck,
+  Sparkles,
   Sun,
   Users,
   type LucideIcon,
@@ -28,6 +29,7 @@ import {
   type StaffDataset,
   type TabId,
 } from "./types";
+import { StaffReport } from "../components/ReportView";
 import { Compare, Explore, Geography, Overview, People, Quality, Schools } from "./views";
 
 const NAV: { label: string; items: { id: TabId; label: string; icon: LucideIcon }[] }[] = [
@@ -38,6 +40,7 @@ const NAV: { label: string; items: { id: TabId; label: string; icon: LucideIcon 
       { id: "explore", label: "Explore", icon: Compass },
       { id: "geography", label: "Geography", icon: MapIcon },
       { id: "compare", label: "Compare", icon: GitCompare },
+      { id: "report", label: "Report", icon: Sparkles },
     ],
   },
   {
@@ -354,6 +357,7 @@ export function StaffApp({ onHome }: { onHome: () => void }) {
           <Compare rows={filtered} onPick={(dim, value) => setFilters((current) => pickDim(current, dim, value))} />
         ) : null}
         {tab === "quality" ? <Quality meta={data.meta} rows={filtered} /> : null}
+        {tab === "report" ? <StaffReport rows={filtered} universe={data.staff.length} chips={chips} /> : null}
       </main>
     </div>
   );

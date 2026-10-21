@@ -82,7 +82,7 @@ export const EMPTY_FILTERS: Filters = {
   kin: "all",
 };
 
-export type TabId = "overview" | "explore" | "geography" | "schools" | "people" | "compare" | "quality";
+export type TabId = "overview" | "explore" | "geography" | "schools" | "people" | "compare" | "quality" | "report";
 
 export type Dim = ListKey | "cnic" | "contact" | "kin";
 
